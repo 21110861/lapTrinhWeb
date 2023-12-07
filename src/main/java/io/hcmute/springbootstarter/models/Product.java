@@ -26,7 +26,7 @@ public class Product {
 	private Date createdat;
 	private Date updatedat;
 	private String image = "https://www.voilah.sg/wp-content/uploads/2020/11/attention-icon-2.png";
-	private String status;
+	private String status = "còn bán";
 	public Product() {
 	}
 	public Product(int id, String title, int price, Category category, Date createdat, Date updatedat, String image,
@@ -44,6 +44,14 @@ public class Product {
 	public Product(int id) {
 		super();
 		this.id = id;
+	}
+	
+	public Product(int id, String title, int price, String image) {
+		super();
+		this.id = id;
+		this.title = title;
+		this.price = price;
+		this.image = image;
 	}
 	public Product(String title, int price, Category category, Date createdat, Date updatedat, String image,
 			String status) {
