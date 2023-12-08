@@ -5,7 +5,7 @@
 
         <jsp:include page="/WEB-INF/jsp/header.jsp" />
 
-       
+
 
         <body>
             <!-- Breadcrumb Begin -->
@@ -70,13 +70,19 @@
                             <div class="cart__discount">
                                 <h6>Tên</h6>
                                 <form id="nameForm">
-                                    <input type="text" id="nameInput" placeholder="tên">
+                                    <input type="text" id="nameInput" placeholder="tên" required>
                                 </form>
                             </div>
                             <div class="cart__discount">
                                 <h6>Địa chỉ</h6>
                                 <form id="addressForm">
-                                    <input type="text" id="addressInput" placeholder="nơi">
+                                    <input type="text" id="addressInput" placeholder="nơi ở" required>
+                                </form>
+                            </div>
+                            <div class="cart__discount">
+                                <h6>Số điện thoại</h6>
+                                <form id="phoneForm">
+                                    <input type="text" id="phoneInput" placeholder="+84" required>
                                 </form>
                             </div>
                             <div class="cart__total">
@@ -113,9 +119,11 @@
 
                     checkoutButton.addEventListener("click", function () {
                         var cartItemsJson = sessionStorage.getItem("cartItems");
-                        saveNoteToSessionStorage();
+                        saveInfoToSessionStorage();
                         var note = sessionStorage.getItem("note");
-
+                        var name = sessionStorage.getItem("name");
+                        var address = sessionStorage.getItem("address");
+                        var phone = sessionStorage.getItem("phone");
                         if (!cartItemsJson) {
                             console.error("Dữ liệu không đủ để thanh toán.");
                             return;
@@ -123,11 +131,18 @@
                         if (!note) {
                             note = "không";
                         }
+                        if (name.trim().length === 0 || address.trim().length === 0) {
+                            alert("tên và địa chỉ và số điện thoại nhập thiếu !!!");
+                            return;
+                        }
                         var cartItems = JSON.parse(cartItemsJson);
 
                         var data = {
                             cartItems: cartItems,
-                            note: note
+                            note: note,
+                            name: name,
+                            address: address,
+                            phone: phone
                         };
 
                         // Make a POST request to the server
@@ -138,6 +153,12 @@
                             },
                             body: JSON.stringify(data),
                         })
+                            .then(response => response.text())
+                            .then(result => {
+                                alert(result);
+                                // địa chỉ trang thanh toán ghi ở đây
+                                window.location.href = "/";
+                            })
                             .catch((error) => {
                                 console.error('Error:', error);
                             });
@@ -145,9 +166,12 @@
                     });
                 }
 
-                function saveNoteToSessionStorage() {
+                function saveInfoToSessionStorage() {
                     var noteInput = document.getElementById("noteInput");
-                    if (!noteInput) {
+                    var nameInput = document.getElementById("nameInput");
+                    var addressInput = document.getElementById("addressInput");
+                    var phoneInput = document.getElementById("phoneInput");
+                    if (!noteInput || !nameInput || !addressInput || !phoneInput) {
                         console.error("Sai gì đó rồi");
                         return;
                     }
@@ -157,6 +181,12 @@
                         ic = /"/g;
                     var noteText = noteInput.value.toString().replace(lt, "&lt;").replace(gt, "&gt;").replace(ap, "&#39;").replace(ic, "&#34;");
                     sessionStorage.setItem("note", noteText);
+                    var nameText = nameInput.value.toString().replace(lt, "&lt;").replace(gt, "&gt;").replace(ap, "&#39;").replace(ic, "&#34;");
+                    sessionStorage.setItem("name", nameText);
+                    var addressText = addressInput.value.toString().replace(lt, "&lt;").replace(gt, "&gt;").replace(ap, "&#39;").replace(ic, "&#34;");
+                    sessionStorage.setItem("address", addressText);
+                    var phoneText = phoneInput.value.toString().replace(/\D/g, '');
+                    sessionStorage.setItem("phone", phoneText);
                 }
 
                 function updateShoplistUI(shoplist) {
