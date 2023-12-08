@@ -8,7 +8,24 @@ public class CheckoutRequest {
 	String name;
 	String address;
 	String phone;
+	int total;
 	
+	public CheckoutRequest(List<CartItem> cartItems, String note, String name, String address, String phone,
+			int total) {
+		super();
+		this.cartItems = cartItems;
+		this.note = note;
+		this.name = name;
+		this.address = address;
+		this.phone = phone;
+		this.total = total;
+	}
+	public int getTotal() {
+		return total;
+	}
+	public void setTotal(int total) {
+		this.total = total;
+	}
 	public CheckoutRequest(List<CartItem> cartItems, String note, String name, String address, String phone) {
 		super();
 		this.cartItems = cartItems;

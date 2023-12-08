@@ -19,7 +19,7 @@
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6">
                             <div class="breadcrumb__links">
-                                <a href="./index.html">Home</a>
+                                <a href="/">Home</a>
                                 <span>Shopping cart</span>
                             </div>
                         </div>
@@ -124,6 +124,7 @@
                         var name = sessionStorage.getItem("name");
                         var address = sessionStorage.getItem("address");
                         var phone = sessionStorage.getItem("phone");
+                        var total = sessionStorage.getItem("total");
                         if (!cartItemsJson) {
                             console.error("Dữ liệu không đủ để thanh toán.");
                             return;
@@ -142,7 +143,8 @@
                             note: note,
                             name: name,
                             address: address,
-                            phone: phone
+                            phone: phone,
+                            total: total
                         };
 
                         // Make a POST request to the server
@@ -155,9 +157,8 @@
                         })
                             .then(response => response.text())
                             .then(result => {
-                                alert(result);
                                 // địa chỉ trang thanh toán ghi ở đây
-                                window.location.href = "/";
+                                window.location.href = result;
                             })
                             .catch((error) => {
                                 console.error('Error:', error);
@@ -295,6 +296,7 @@
 
                 function updateTotalDisplay(total) {
                     var totalDisplay = document.querySelector(".cart__total ul");
+                    sessionStorage.setItem("total",total);
                     if (totalDisplay) {
                         totalDisplay.innerHTML = '<li>Total <span>' + total.toLocaleString() + ' VNĐ</span></li>';
                     } else {
@@ -340,7 +342,7 @@
                     shoplist.forEach(function (item) {
                         total += item.product.price * item.quantity;
                     });
-
+                    
                     updateTotalDisplay(total);
                 }
             </script>
