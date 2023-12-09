@@ -80,6 +80,16 @@ public class Category {
 	public void setDetail(String detail) {
 		this.detail = detail;
 	}
-	
+	@Override
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", created_at=" + createdat + '\'' +
+                ", updated_at=" + updatedat + '\'' +
+                ", image='" + image + '\'' +
+                ", detail='" + detail + '\'' +
+                '}';
+    }
 	
 }

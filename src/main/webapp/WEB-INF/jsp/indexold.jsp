@@ -5,7 +5,7 @@
             <html lang="zxx">
 
             <jsp:include page="/WEB-INF/jsp/header.jsp" />
-
+            
 
             <body>
                 <!-- Hero Section Begin -->
@@ -65,9 +65,7 @@
                                                 <fmt:formatNumber value="${product.price}" pattern="#,### VNĐ" />
                                             </div>
                                             <div class="cart_add">
-                                                <a href="#" onclick="viewDetail(${product.id})"
-                                                    data-product-id="${product}">Tìm hiểu</a>
-
+                                                <a href="#" data-product-id="${product}">mua liền tay</a>
                                             </div>
                                         </div>
                                     </div>
@@ -77,25 +75,57 @@
                     </div>
                 </section>
                 <!-- Product Section End -->
+
+                <jsp:include page="/WEB-INF/jsp/footer.jsp" />
+
                 <script>
-                    function viewDetail(productId) {
-                        sessionStorage.setItem("latestId",productId);
-                        // Lưu trữ thông tin sản phẩm vào localStorage
-                        var productIds = JSON.parse(localStorage.getItem('historyProduct')) || [];
-                        
-                        
-                        if (!productIds.includes(productId)) {
-                           
-                            productIds.push(productId);
-                            localStorage.setItem('historyProduct', JSON.stringify(productIds));
+                    document.addEventListener("DOMContentLoaded", function () {
+                        var addToCartButtons = document.querySelectorAll("section.product .cart_add a");
+                        var totalQuantityDisplay = document.querySelector("#countDrink");
+
+                        if (!totalQuantityDisplay) {
+                            console.error("Element with id countDrink not found");
+                            return;
                         }
 
-                        // Tiến hành chuyển hướng đến trang detail
-                        window.location.href = "/detail";
-                    }
+                        var cartItems = JSON.parse(sessionStorage.getItem("cartItems")) || [];
+
+                        addToCartButtons.forEach(function (button) {
+                            button.addEventListener("click", function (event) {
+                                event.preventDefault();
+
+                                var product = button.getAttribute("data-product-id");
+                                var validProduct = product.replace(/'/g, '"');
+                                var jsonproduct = JSON.parse(validProduct);
+                                console.log(jsonproduct);
+                                // Check if the product is already in the cart
+                                var existingItem = cartItems.find(item => item.product.id === jsonproduct.id);
+
+                                if (existingItem) {
+                                    existingItem.quantity += 1;
+                                } else {
+                                    // If the product is not in the cart, add it
+                                    cartItems.push({
+                                        product: jsonproduct,
+                                        quantity: 1
+                                    });
+                                }
+
+                                sessionStorage.setItem("cartItems", JSON.stringify(cartItems));
+
+                                // Update the content of the span element with the length of the cartItems array
+                                totalQuantityDisplay.textContent = cartItems.length.toString() + " món";
+
+                                console.log("Item added to cart. Total items in cart:", cartItems.length);
+
+                                // Additional logic for handling the cart update
+                            });
+                        });
+                    });
 
                 </script>
-                <jsp:include page="/WEB-INF/jsp/footer.jsp" />
+
+
             </body>
 
             </html>

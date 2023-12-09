@@ -13,5 +13,5 @@ public interface OrdersRepository extends CrudRepository<Orders, Integer> {
 	@Transactional
 	@Query(value = "INSERT INTO Order_details(id, idprod, num) VALUES (:value1, :value2, :value3)", nativeQuery = true)
 	void insertDetail(@Param("value1") int value1, @Param("value2") int value2, @Param("value3") int value3);
-
+	public Long countById(Integer id);
 }

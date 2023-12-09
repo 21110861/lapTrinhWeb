@@ -1,6 +1,7 @@
 package io.hcmute.springbootstarter.services;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,4 +49,27 @@ public class OrdersService {
 		neworder.setState("Đã thanh toán");
 		ordersRepository.save(neworder);
 	}
+	public List<Orders> listAll() {
+        return (List<Orders>) ordersRepository.findAll();
+    }
+
+    public void save(Orders order) {
+        ordersRepository.save(order);
+    }
+
+    public Orders get(Integer id) throws Exception {
+        Optional<Orders> result = ordersRepository.findById(id);
+        if (result.isPresent()) {
+            return result.get();
+        }
+        throw new Exception("Could not find any Orders with ID " + id);
+    }
+
+    public void delete(Integer id) throws Exception {
+        Long count = ordersRepository.countById(id);
+        if (count == null || count == 0) {
+            throw new Exception("Could not find any Orders with ID " + id);
+        }
+        ordersRepository.deleteById(id);
+    }
 }

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+  <title>[[${pageTitle}]]</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+    }
+
+    form
+    {
+      margin-top: 50px ;
+    }
+    .Card {
+      display: flex;
+      max-width: 700px;
+      margin: 0 auto;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    }
+
+    .card_img {
+
+      padding: 30px;
+      margin-right: 100px;
+    }
+
+    .card_img img {
+      max-width: 100%;
+      height: auto;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+
+    .product-info {
+      flex: 1;
+      padding: 10px;
+    }
+
+    .product-info .card_title {
+      font-size: 30px;
+      font-weight: bolder;
+      margin-bottom: 10px;
+    }
+
+    .product-info .card_price
+    {
+      font-size: 25px;
+      color: Green;
+    }
+
+    .product-info p {
+      font-size: 20px;
+      margin: 10px 0;
+
+    }
+
+    .product-info button {
+      background-color: #007BFF;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      font-size: 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .card_action
+    {
+      padding-left: 280px;
+    }
+
+    .product-info button:hover
+    {
+      transform: scale(1.1);
+      transition: 0.5s;
+    }
+
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed"
+              data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+              aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span> <span
+              class="icon-bar"></span> <span class="icon-bar"></span> <span
+              class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#" th:href="@{/admin}">Admin Site</a>
+    </div>
+    <div id="navbar" class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+        <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<br>
+<br>
+
+<form th:object="${product}">
+  <div class="Card">
+    <div class="card_img">Ảnh sản phẩm:
+      <img th:src="${product.image}" alt="Product Image" style="max-width: 200px; max-height: 200px;" />
+    </div>
+
+    <div class="product-info">
+      <div class="card_title">[[${product.title}]]</div>
+      <div class="card_price"> [[${product.price}]] VND</div>
+      <p>ID Danh mục: [[${product.idCate}]]</p>
+      <p>Ngày tạo: [[${product.created}]]</p>
+      <p>Ngày cập nhật: [[${product.updated}]]</p>
+      <div class="card_action">
+        <button class="add-to-cart-button" onclick="cancelForm()" th:href="@{/admin}">Cancel</button>
+      </div>
+    </div>
+  </div>
+</form>
+<script type="text/javascript">
+  function cancelForm() {
+    window.location = "http://localhost:8080/products";
+  }
+</script>
+</body>
+</html>

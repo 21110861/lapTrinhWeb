@@ -105,8 +105,9 @@
                         <div class="col-lg-12">
                             <nav class="header__menu mobile-menu">
                                 <ul>
-                                    <li class="active"><a href="/">Mua hàng</a></li>
+                                    <li class="active"><a href="/">Trang Chủ</a></li>
                                     <li><a href="./about.html">Liên hệ</a></li>
+                                    <li><a href="./shop.html">Mua Hàng</a></li>
                                 </ul>
                             </nav>
                         </div>

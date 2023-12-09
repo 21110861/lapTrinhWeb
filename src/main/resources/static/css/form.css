@@ -1,0 +1,37 @@
+body {
+    background-color: #f8f9fa; /* Màu nền cho body */
+    padding-top: 50px; /* Khoảng cách từ trên xuống cho phần container */
+}
+
+h2 {
+    color: #007bff; /* Màu chữ cho tiêu đề */
+}
+
+form {
+    background-color: #ffffff; /* Màu nền cho form */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng đổ */
+    padding: 20px; /* Khoảng cách giữa các phần tử trong form */
+}
+
+.form-group {
+    margin-bottom: 15px; /* Khoảng cách giữa các form group */
+}
+
+label {
+    color: #495057; /* Màu chữ cho nhãn label */
+}
+
+.btn-primary {
+    background-color: #007bff; /* Màu nền cho button Save */
+    border-color: #007bff; /* Màu đường viền cho button Save */
+}
+
+.btn-secondary {
+    background-color: #6c757d; /* Màu nền cho button Cancel */
+    border-color: #6c757d; /* Màu đường viền cho button Cancel */
+}
+
+/* Hover effect for buttons */
+.btn-primary:hover, .btn-secondary:hover {
+    filter: brightness(90%); /* Hiệu ứng sáng nhẹ khi hover */
+}

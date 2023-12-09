@@ -1,0 +1,67 @@
+tbody th
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+body {
+    padding-top: 10px; /* Adjusted to match the navbar height */
+}
+
+.navbar {
+    border-radius: 0; /* Optional: Removes the rounded corners from the navbar */
+}
+
+.navbar-brand {
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff; /* Optional: Change the text color */
+}
+
+.m-2
+{
+    margin: 20px;
+}
+
+.navbar-nav > li > a {
+    color: #fff; /* Optional: Change the text color */
+}
+
+.navbar-nav > li > a:hover {
+    color: #ccc; /* Optional: Change the text color on hover */
+}
+
+.btn-primary {
+    background-color: #4CAF50;
+    border-color: #4CAF50;
+    color: #fff;
+    font-weight: bold;
+}
+
+.btn-primary:hover {
+    background-color: #45a049;
+    border-color: #45a049;
+}
+
+.table th, .table td {
+    text-align: center;
+}
+
+.h3, .h4 {
+    color: #4CAF50;
+    text-decoration: none;
+    border: 1px solid #0f0f21; /* Add border */
+    padding: 8px 16px; /* Add padding for a better appearance */
+    border-radius: 4px; /* Optional: Add rounded corners */
+    transition: background-color 0.3s, color 0.3s; /* Add smooth transition */
+}
+
+.h3:hover, .h4:hover {
+    color: #fff;
+    background-color: #4CAF50;
+}
+
+.alert {
+    background-color: #4CAF50;
+    color: #fff;
+}
