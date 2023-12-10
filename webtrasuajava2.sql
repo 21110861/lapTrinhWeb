@@ -32,6 +32,8 @@ CREATE TABLE `product` (
   `createdat` datetime DEFAULT NULL,
   `updatedat` datetime DEFAULT NULL,
   `image` varchar(500) NOT NULL,
+  `information` nvarchar(1000) DEFAULT NULL,
+  `description` nvarchar(1000) DEFAULT NULL,
   `status` nvarchar(255) DEFAULT NULL,
   FOREIGN KEY (`idcate`) REFERENCES `category` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -52,18 +54,17 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `role` (
-	`id` int(11) NOT NULL,
-    `permission` nvarchar(100) NOT NULL,
-    FOREIGN KEY (`id`) REFERENCES `users` (`id`)
+	`id` int NOT NULL AUTO_INCREMENT primary key,
+    `name` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `users` (`name`, `pass`, `email`) VALUES
-('admin', 'admin123', 'admin123@gmail.com'),
-('Đinh Chu Hoàng', '123456', 'dch@gmail.com'),
-('Chu Hồ Phạm', '111111', 'chp@gmail.com');
+CREATE TABLE `users_roles` (
+    `user_id` int,
+    `role_id` int,
+    FOREIGN KEY (`user_id`) REFERENCES `users`(`id`),
+    FOREIGN KEY (`role_id`) REFERENCES `role`(`id`)
+);
 
-INSERT INTO `role` (`id`, `permission`) VALUES
-('1', 'Thêm, sửa, xóa');
 
 INSERT INTO `category` (`id`, `name`, `createdat`, `updatedat`, `image`, `detail`) VALUES
 (1, 'Trà sữa', '2020-01-01 00:00:00', '2023-11-07 08:07:44', 'https://i.pinimg.com/564x/67/28/9c/67289c8c69651b25b9ac5a39a6d9ce81.jpg', 'Cùng thưởng thức những món trà sữa hot trend, độc đáo, béo ngậy, thơm ngon.'),
@@ -71,38 +72,40 @@ INSERT INTO `category` (`id`, `name`, `createdat`, `updatedat`, `image`, `detail
 (3, 'Bánh mì', '2020-01-01 00:00:00', '2023-07-22 16:12:25', 'https://i.pinimg.com/564x/d6/df/f0/d6dff03bc5e48070d5280fc1a979ab06.jpg', 'Gói gọn trong ổ bánh mì Việt Nam là từng lớp chả, từng lớp jambon hòa quyện cùng bơ và pate thơm lừng, thêm dưa rau cho bữa sáng đầy năng lượng.'),
 (4, 'Cà phê', '2020-01-01 00:00:00', '2023-07-13 10:57:52', 'https://i.pinimg.com/564x/38/38/fd/3838fd2bcaceff404efc8329aba19b4c.jpg', 'Thức uống giúp tỉnh táo tức thì để bắt đầu ngày mới thật hứng khởi.');
 
-INSERT INTO `product` (`title`, `price`, `idcate`, `createdat`, `updatedat`, `image`, `status`) VALUES
-('BÁNH SÔ-CÔ-LA', 25000, 2, '2020-01-01 00:00:00', '2021-08-15 16:41:50', 'https://www.mybakingaddiction.com/wp-content/uploads/2011/10/lr-0938.jpg', 'còn bán'),
-('Trà Sen Vàng', 35000, 1, '2020-01-01 00:00:00', '2021-08-15 16:53:50', 'https://i.pinimg.com/564x/95/d7/7b/95d77b09e864be2ac2166c8e87d65dc2.jpg', 'còn bán'),
-('Trà Vải', 45000, 1, '2020-01-01 00:00:00', '2021-08-15 16:53:50', 'https://bizweb.dktcdn.net/100/290/576/files/travai2.jpg?v=1615278850368', 'còn bán'),
-('Bánh Mì Thịt Nướng', 25000, 3, '2020-01-01 00:00:00', '2021-08-15 16:12:51', 'https://i.pinimg.com/564x/0d/96/53/0d9653f61c292e1836ceee24790e6872.jpg', 'còn bán'),
-('BÁNH MOUSSE ĐÀO', 35000, 2, '2020-01-01 00:00:00', '2021-08-15 16:24:51', 'https://i.pinimg.com/564x/06/68/89/066889e9d961900c0fdc7c16490bee55.jpg', 'còn bán'),
-('Trà Lài', 35000, 1, '2020-01-01 00:00:00', '2021-08-15 16:24:51', 'https://i.pinimg.com/564x/ac/83/b8/ac83b80f568b6ffa0772c29a6f73a122.jpg', 'còn bán'),
-('Trà Sen', 35000, 1, '2020-01-01 00:00:00', '2021-08-15 19:24:51', 'https://i.pinimg.com/564x/2b/f3/e2/2bf3e2067b4c20b6aec6936aff3d3cfa.jpg', 'còn bán'),
-('Trà sữa trân trâu đen', 50000, 1, '2020-01-01 00:00:00', '2021-08-15 16:44:51', 'https://i.pinimg.com/564x/e9/79/bd/e979bd9e68299c29a6df1bd8c64e69b5.jpg', 'còn bán'),
-('Trà sữa Matcha', 25000, 1, '2020-01-01 00:00:00', '2021-08-15 16:02:52', 'https://i.pinimg.com/564x/97/84/40/978440fe09d65d3d1c461e614bd150d5.jpg', 'còn bán'),
-('Cafe Phin Đen Nóng', 50000, 4, '2020-01-01 00:00:00', '2021-08-15 16:18:52', 'https://i.pinimg.com/564x/95/a8/aa/95a8aa9c707f72fa24f67c3588a228f8.jpg', 'tạm ngưng'),
-('Trà Sữa Thượng Hạng', 50000, 1, '2020-01-01 00:00:00', '2021-08-15 16:16:12', 'https://i.pinimg.com/564x/d1/32/9b/d1329b9e4ac21cd117082acb83831355.jpg', 'còn bán'),
-('Bạc Xỉu Đá', 30000, 4, '2020-01-01 00:00:00', '2021-08-15 16:45:54', 'https://i.pinimg.com/564x/de/70/e9/de70e97e57073ccc141876099df293ee.jpg', 'còn bán'),
-('BÁNH CHUỐI', 19000, 2, '2020-01-01 00:00:00', '2021-08-15 16:40:53', 'https://i.pinimg.com/564x/3e/18/ec/3e18ec4a79acdf91a7e0f854faaa9693.jpg', 'còn bán'),
-('Bánh Mousse Cacao', 35000, 2, '2020-01-01 00:00:00', '2021-08-15 16:00:55', 'https://i.pinimg.com/564x/04/f7/98/04f798fa65f7900f4d37328fa2801984.jpg', 'còn bán'),
-('Trà Sữa 3 Con Mèo', 36000, 1, '2020-01-01 00:00:00', '2021-08-15 16:30:55', 'https://i.pinimg.com/564x/b1/0b/f9/b10bf9f746e5470aaa0d8231a0b03f09.jpg', 'tạm ngưng'),
-('Bánh Mì Xíu Mại', 20000, 3, '2020-01-01 00:00:00', '2021-08-15 16:17:55', 'https://i.pinimg.com/564x/f4/24/66/f42466e76c7b6b8f379ffdca49ef2dcb.jpg', 'tạm ngưng'),
-('Bánh Caramel Phô Mai', 35000, 2, '2020-01-01 00:00:00', '2021-08-15 16:35:55', 'https://i.pinimg.com/564x/1a/ef/77/1aef771b0fd4ddffce50e4afba048cac.jpg', 'còn bán'),
-('Trà Thạch Đào', 50000, 1, '2020-01-01 00:00:00', '2021-08-15 16:48:55', 'https://i.pinimg.com/564x/eb/6b/a9/eb6ba9252e14b12515434a2d8c96d1f0.jpg', 'còn bán'),
-('Trà Thạch Vải', 50000, 1, '2020-01-01 00:00:00', '2021-08-15 16:03:56', 'https://i.pinimg.com/564x/2a/f6/3f/2af63fb235f30c49422674ade7cf0b02.jpg', 'còn bán'),
-('Trà Đào', 50000, 1, '2020-01-01 00:00:00', '2021-08-15 16:20:56', 'https://i.pinimg.com/564x/ac/b3/4e/acb34e7aa86f8f448a4d011fcb873034.jpg', 'còn bán'),
-('Cà Phê Đá', 30000, 4, '2020-01-01 00:00:00', '2021-08-15 16:42:56', 'https://i.pinimg.com/564x/fd/f5/f8/fdf5f86970dceb814cee1d109aaa887b.jpg', 'còn bán'),
-('Trà Sữa Trân Châu Đường Đen', 30000, 1, '2020-01-01 00:00:00', '2021-08-15 16:42:56', 'https://i.pinimg.com/564x/b4/61/b6/b461b6b7821abae465fe5fba0eb52411.jpg', 'còn bán'),
-('Trà Sữa Dâu', 30000, 1, '2020-01-01 00:00:00', '2021-08-15 16:10:56', 'https://i.pinimg.com/564x/55/d8/e8/55d8e8a663e460bc6ae5ee700856b26a.jpg', 'tạm ngưng'),
-('Trà Trái Cây', 32000, 1, '2020-01-01 00:00:00', '2021-08-15 16:42:56', 'https://i.pinimg.com/736x/b3/fb/3c/b3fb3c5d95c53b1ee4f61289d9708349.jpg', 'còn bán'),
-('Hồng Trà', 30000, 1, '2020-01-01 00:00:00', '2021-08-15 16:42:56', 'https://i.pinimg.com/564x/3c/01/30/3c0130fdbdfb70047d0e9d7ced83493f.jpg', 'còn bán'),
-('Bánh Tiramisu', 35000, 2, '2020-01-01 00:00:00', '2021-08-15 16:57:56', 'https://i.pinimg.com/564x/5e/09/c8/5e09c81bd1cd40ecb3bb4e5c7c0dcb0d.jpg', 'còn bán'),
-('Trà Chanh', 30000, 1, '2020-01-01 00:00:00', '2021-08-15 12:42:56', 'https://i.pinimg.com/564x/84/c3/0d/84c30d782d3b2bd923456acd5b5b0786.jpg', 'còn bán'),
-('Bánh Đồng Xu', 20000, 2, '2020-01-01 00:00:00', '2021-08-15 16:13:57', 'https://i.pinimg.com/564x/f8/8f/58/f88f5819be06576be605fd07b91bca00.jpg', 'còn bán'),
-('Bánh Quy', 19000, 2, '2020-01-01 00:00:00', '2021-08-15 16:28:57', 'https://i.pinimg.com/564x/3b/83/7e/3b837e287f86de286d020d97e40a75bb.jpg', 'còn bán'),
-('Cafe Phindi Hồng Trà', 35000, 4, '2020-01-01 00:00:00', '2021-08-15 17:03:01', 'https://www.highlandscoffee.com.vn/vnt_upload/news/12_2020/OB12-KV-FINAL.jpg', 'còn bán'),
-('Cafe Phindi Kem Sữa', 35000, 4, '2020-01-01 00:00:00', '2021-08-15 17:28:01', 'https://www.highlandscoffee.com.vn/vnt_upload/news/09_2020/Screen_Shot_2020-09-12_at_12.12.36.png', 'còn bán');
+INSERT INTO `product` (`title`, `price`, `idcate`, `createdat`, `updatedat`, `image`, `information`, `description`, `status`) VALUES
+('Bánh Chocolate', 25000, 2, '2020-01-01 00:00:00', '2021-08-15 16:41:50', 'https://i.pinimg.com/564x/ad/45/9f/ad459ffca2f96fe556f9d185b972238e.jpg', 'Bánh chocolate là một món tráng miệng được yêu thích đã được thưởng thức trong nhiều thế kỷ. Đây là một loại bánh truyền thống có nhiều hình thức khác nhau, từ các công thức làm tại nhà đơn giản đến những sáng tạo ẩm thực phức tạp.', 'Bánh chocolate được đặc trưng bởi hương vị đậm đà và sang trọng. Mùi cacao lấp đầy không khí khi bánh nướng, tạo ra sự hứng thú cho việc thưởng thức. Cấu trúc của bánh có thể thay đổi từ đặc và đậm đặc đến nhẹ nhàng và phồng, tùy thuộc vào công thức cụ thể và nguyên liệu được sử dụng.', 'còn bán'),
+('Trà Sen Vàng', 35000, 1, '2020-01-01 00:00:00', '2021-08-15 16:53:50', 'https://i.pinimg.com/564x/95/d7/7b/95d77b09e864be2ac2166c8e87d65dc2.jpg', 'Trà Sen Vàng là một loại trà đặc biệt được chế biến từ búp sen và lá sen. Đây không chỉ là một thức uống thơm ngon mà còn được coi là một biểu tượng của sự thanh tao và tinh khôi trong nền văn hóa trà ở một số quốc gia châu Á.', 'Trà Sen Vàng mang lại cảm giác thanh khiết và tinh tế, với mùi hương nồng nàn của sen và vị trà xanh mát lạnh. Mỗi giọt trà mang theo hương thơm của sen tinh tế, tạo ra một trải nghiệm uống trà đặc biệt. Màu sắc của trà thường có sắc vàng nhạt, tượng trưng cho vẻ đẹp của sen và tinh khôi của trà. Đôi khi, trà sen còn được phục vụ với đường hoặc mật ong để làm tăng thêm hương vị ngọt ngào.', 'còn bán'),
+('Trà Vải', 45000, 1, '2020-01-01 00:00:00', '2021-08-15 16:53:50', 'https://bizweb.dktcdn.net/100/290/576/files/travai2.jpg?v=1615278850368', 'Trà Vải là một thức uống thơm ngon và sảng khoái, thường được tạo ra từ lá trà và vị ngọt tự nhiên của quả vải. Đây là một lựa chọn tuyệt vời cho những người yêu thích hương vị tự nhiên và sự tươi mới của trà hoa quả.', 'Trà Vải mang lại cảm giác tươi mới và ngọt ngào của quả vải kết hợp với hương thơm nhẹ của lá trà. Màu sắc thường có sắc vàng nhạt hoặc nâu nhạt, tùy thuộc vào loại trà bạn sử dụng. Hương vị tự nhiên của quả vải thường làm cho trà trở nên ngon miệng và hấp dẫn, là một lựa chọn tuyệt vời cho những ngày hè nóng bức.', 'còn bán'),
+('Bánh Mì Thịt Nướng', 25000, 3, '2020-01-01 00:00:00', '2021-08-15 16:12:51', 'https://i.pinimg.com/564x/0d/96/53/0d9653f61c292e1836ceee24790e6872.jpg', 'Bánh mì thịt nướng, hay còn gọi là bánh mì xíu mại, là một món ăn phổ biến và ngon miệng, kết hợp giữa bánh mì mềm mịn và thịt nướng thơm ngon. Đây là một món ăn đường phố phổ biến ở nhiều quốc gia và có nhiều biến thể khác nhau.', 'Bánh mì thịt nướng có hương vị thơm ngon, ngọt ngào từ thịt nướng cùng với độ giòn của bánh mì và sự tươi mới của rau sống. Sự kết hợp của các thành phần tạo ra một bữa ăn đầy đủ dinh dưỡng và đầy ấn tượng, phù hợp để thưởng thức trong bữa trưa hoặc những bữa ăn nhanh trên đường phố.', 'còn bán'),
+('Bánh Mousse Đào', 35000, 2, '2020-01-01 00:00:00', '2021-08-15 16:24:51', 'https://i.pinimg.com/564x/06/68/89/066889e9d961900c0fdc7c16490bee55.jpg', 'Bánh Mousse Đào là một món tráng miệng ngon miệng và hấp dẫn, thường được tạo ra từ lớp mousse mềm mịn với hương vị tuyệt vời của đào. Đây là một lựa chọn phổ biến trong thực đơn tráng miệng của nhiều nhà hàng và cà phê sang trọng.', 'Bánh Mousse Đào có lớp mousse mềm mịn và độ ngọt vừa phải, kết hợp với hương thơm tinh tế của đào. Đây là một món tráng miệng tuyệt vời cho các dịp đặc biệt hoặc để làm bữa ăn tráng miệng sang trọng tại nhà. Nó không chỉ ngon miệng mà còn có vẻ ngoại hình đẹp mắt và quyến rũ.', 'còn bán'),
+('Trà Lài', 35000, 1, '2020-01-01 00:00:00', '2021-08-15 16:24:51', 'https://i.pinimg.com/564x/ac/83/b8/ac83b80f568b6ffa0772c29a6f73a122.jpg', 'Trà Lài là một loại trà phổ biến có nguồn gốc từ Đài Loan và sau đó được phổ biến rộng rãi trên thế giới. Đây là một biến thể của trà đen, có hương vị đặc trưng và độ mạnh, thường được phục vụ với đá và đường.', 'Trà Lài có màu nâu đậm và hương vị mạnh mẽ, thường được phục vụ với đá và đường để tạo ra một thức uống trà đen ngon miệng và sảng khoái. Hương thơm của lá trà đen kết hợp với độ ngọt từ đường tạo ra một trải nghiệm thưởng thức trà đặc biệt. Đây là một lựa chọn phổ biến cho những người yêu trà đen và muốn thưởng thức một cách đặc trưng và tinh tế.', 'còn bán'),
+('Trà Sen', 35000, 1, '2020-01-01 00:00:00', '2021-08-15 19:24:51', 'https://i.pinimg.com/564x/2b/f3/e2/2bf3e2067b4c20b6aec6936aff3d3cfa.jpg', 'Trà Sen là một thức uống truyền thống phổ biến trong nhiều nền văn hóa, đặc biệt là ở các quốc gia châu Á. Thức uống này được tạo ra bằng cách sử dụng hoa sen, lá sen và thường kèm theo trà để tạo ra hương vị độc đáo và thơm ngon.', 'Trà Sen có màu vàng nhạt và hương thơm đặc trưng của sen, tạo ra một thức uống nhẹ nhàng và tinh tế. Hương vị của trà sen thường nhẹ nhàng, mát lạnh và có độ dẻo dai từ lá sen. Đây là một lựa chọn tuyệt vời để thưởng thức vào buổi chiều hoặc những lúc cần thư giãn. Trà Sen cũng thường được xem là biểu tượng của sự thanh khiết và tinh khôi trong nền văn hóa trà.', 'còn bán'),
+('Trà sữa trân châu đen', 50000, 1, '2020-01-01 00:00:00', '2021-08-15 16:44:51', 'https://i.pinimg.com/564x/e9/79/bd/e979bd9e68299c29a6df1bd8c64e69b5.jpg', 'Trà sữa trân châu đen là một đặc sản trong thế giới trà sữa, kết hợp hương vị độc đáo của trà đen, sự đậm đà của sữa, và sự ngon miệng của trân châu đen.', 'Trà sữa trân châu đen có màu đen huyền bí và hương vị độc đáo. Trân châu đen mang lại sự dẻo dai và ngon miệng, kết hợp với hương vị đậm đà của trà đen và sự béo ngậy của sữa. Đây là một thức uống phổ biến trong các quán trà sữa và thường được ưa chuộng vì sự hấp dẫn và trải nghiệm thú vị khi nhấm nháp từ trân châu đen.', 'còn bán'),
+('Trà sữa Matcha', 25000, 1, '2020-01-01 00:00:00', '2021-08-15 16:02:52', 'https://i.pinimg.com/564x/97/84/40/978440fe09d65d3d1c461e614bd150d5.jpg', 'Trà sữa Matcha là một thức uống phổ biến, kết hợp hương vị độc đáo của trà Matcha với sự béo ngậy và ngọt ngào của sữa.', 'Trà sữa Matcha có màu xanh đặc trưng và hương vị đặc sắc của trà Matcha, cùng với sự béo ngậy và ngọt ngào từ sữa. Đây là một thức uống thơm ngon, ngon miệng và thường được biết đến với lợi ích sức khỏe của trà xanh Matcha. Trà sữa Matcha thường được phục vụ trong cốc lớn hoặc cốc nhỏ, là một sự lựa chọn thú vị cho những người yêu thích hương vị trà xanh đặc trưng.', 'còn bán'),
+('Cafe Phin Đen Nóng', 50000, 4, '2020-01-01 00:00:00', '2021-08-15 16:18:52', 'https://i.pinimg.com/564x/95/a8/aa/95a8aa9c707f72fa24f67c3588a228f8.jpg', 'Cà phê phin đen nóng là một cách pha cà phê truyền thống và phổ biến ở Việt Nam, sử dụng phin - một thiết bị pha cà phê đơn giản và hiệu quả.', 'Cà phê phin đen nóng mang đến hương vị đậm đà, đặc trưng của cà phê Việt Nam. Phương pháp pha phin giúp cà phê trải qua quá trình rót chậm, tăng cường hương thơm và độ đậm đà. Cà phê phin thường có hương vị cân bằng, thơm ngon và dễ uống, phản ánh sự truyền thống và đơn giản trong cách pha cà phê tại Việt Nam. Thưởng thức cà phê phin đen nóng là một trải nghiệm tuyệt vời và gần gũi với văn hóa cà phê của quốc gia này.', 'tạm ngưng'),
+('Trà Sữa Thượng Hạng', 50000, 1, '2020-01-01 00:00:00', '2021-08-15 16:16:12', 'https://i.pinimg.com/564x/d1/32/9b/d1329b9e4ac21cd117082acb83831355.jpg', 'Trà sữa thượng hạng là một biến thể cao cấp của thức uống trà sữa truyền thống. Thông thường, trà sữa thượng hạng sẽ sử dụng các nguyên liệu chất lượng cao và quy trình pha chế tinh tế để tạo ra một trải nghiệm thưởng thức trà sữa đặc biệt và sang trọng.', 'Trà sữa thượng hạng thường mang lại trải nghiệm thưởng thức cao cấp với hương vị trà đặc biệt, trân châu mềm mại và sự béo ngậy của sữa. Thông thường, nó được phục vụ trong cốc lớn, trang trí đẹp mắt và có thể kèm theo những chi tiết thẩm mỹ cao cấp như lớp kem trên cùng hoặc trang trí bằng caramen. Đây là một biến thể sang trọng và thưởng thức được của trà sữa.', 'còn bán'),
+('Bạc Xỉu Đá', 30000, 4, '2020-01-01 00:00:00', '2021-08-15 16:45:54', 'https://i.pinimg.com/564x/de/70/e9/de70e97e57073ccc141876099df293ee.jpg', 'Bạc xỉu đá là một biến thể của cà phê phổ biến ở Việt Nam, thường được thưởng thức trong các quán cà phê đường phố.', 'Bạc xỉu đá có màu sáng, hương vị độc đáo của cà phê kết hợp với độ mát lạnh từ đá. "Bạc xỉu" thường ám chỉ tỷ lệ cà phê và sữa khá nhẹ, tạo ra một thức uống mượt mà và dễ uống. Đôi khi, thêm sữa đặc đường sẽ tạo thêm độ ngọt và độ béo cho thức uống. Bạc xỉu đá thường là một lựa chọn phổ biến trong thời tiết nóng ở Việt Nam, mang lại cảm giác sảng khoái và thư giãn khi thưởng thức.', 'còn bán'),
+('Bánh Chuối', 19000, 2, '2020-01-01 00:00:00', '2021-08-15 16:40:53', 'https://i.pinimg.com/564x/3e/18/ec/3e18ec4a79acdf91a7e0f854faaa9693.jpg', 'Bánh chuối là một món tráng miệng ngon miệng được làm từ chuối, thường được hấp hoặc nướng.', 'Bánh chuối có hương vị thơm ngon và ngọt ngào của chuối, kết hợp với sự mềm mại của bột. Nó có thể được thưởng thức ấm nóng hoặc nguội, là một lựa chọn ngon miệng cho bữa ăn trưa hoặc làm bữa tráng miệng. Bánh chuối thường được xem là một món truyền thống và phổ biến trong nhiều nền văn hóa khác nhau.', 'còn bán'),
+('Bánh Mousse Cacao', 35000, 2, '2020-01-01 00:00:00', '2021-08-15 16:00:55', 'https://i.pinimg.com/564x/04/f7/98/04f798fa65f7900f4d37328fa2801984.jpg', 'Bánh mousse cacao là một món tráng miệng thơm ngon và mềm mại, thường được làm từ lớp mousse cacao nhẹ nhàng và bánh bông lan hoặc bánh chocolate.', 'Bánh mousse cacao là một sự kết hợp hoàn hảo giữa hương vị đậm đà của sô cô la và độ mềm mại của lớp mousse. Bánh có thể được thưởng thức nguội từ tủ lạnh và là một lựa chọn tuyệt vời cho bữa tiệc hoặc các dịp đặc biệt. Đây là một món tráng miệng thượng hạng và thơm ngon cho những người yêu thích sô cô la.', 'còn bán'),
+('Trà Sữa 3 Con Mèo', 36000, 1, '2020-01-01 00:00:00', '2021-08-15 16:30:55', 'https://i.pinimg.com/564x/b1/0b/f9/b10bf9f746e5470aaa0d8231a0b03f09.jpg', 'Trà Sữa 3 Con Mèo có ý nghĩa tương tự như trà sữa trân châu đen và thêm nhiều topping hơn', 'Đây là một phiên bản độc đáo hoặc biến thể phong cách sáng tạo của trà sữa truyền thống. Trong thế giới trà sữa, có nhiều loại topping khác nhau có thể thêm vào để tạo ra trải nghiệm thưởng thức đa dạng.', 'tạm ngưng'),
+('Bánh Mì Xíu Mại', 20000, 3, '2020-01-01 00:00:00', '2021-08-15 16:17:55', 'https://i.pinimg.com/564x/f4/24/66/f42466e76c7b6b8f379ffdca49ef2dcb.jpg', 'Bánh mì xíu mại là một món ăn đường phố phổ biến, thường xuất hiện trong các quán bánh mì Việt Nam.', 'Bánh mì xíu mại là một sự kết hợp ngon miệng giữa thịt xíu mại giòn và bánh mì mềm mại, kèm theo hương vị đặc trưng của gia vị Việt Nam. Bánh mì xíu mại thường là một lựa chọn ăn sáng hoặc ăn nhẹ phổ biến trong ẩm thực đường phố Việt Nam.', 'tạm ngưng'),
+('Bánh Caramel Phô Mai', 35000, 2, '2020-01-01 00:00:00', '2021-08-15 16:35:55', 'https://i.pinimg.com/564x/1a/ef/77/1aef771b0fd4ddffce50e4afba048cac.jpg', 'Bánh caramel phô mai là một món tráng miệng ngon miệng kết hợp giữa hương vị thơm béo của phô mai và độ ngọt của caramel.', 'Bánh caramel phô mai có vị ngọt, thơm béo của phô mai và hương caramel thơm nồng. Đây là một món tráng miệng đặc sắc, thích hợp để thưởng thức trong các dịp đặc biệt hoặc làm quà biếu. Sự kết hợp giữa lớp caramel ngọt và lớp bánh mềm mại tạo nên một trải nghiệm thưởng thức độc đáo.', 'còn bán'),
+('Trà Thạch Đào', 50000, 1, '2020-01-01 00:00:00', '2021-08-15 16:48:55', 'https://i.pinimg.com/564x/eb/6b/a9/eb6ba9252e14b12515434a2d8c96d1f0.jpg', 'Trà thạch đào là một thức uống phổ biến, kết hợp giữa hương vị trà thơm ngon và sự ngon miệng của thạch đào mát lạnh.', 'Trà thạch đào là một sự kết hợp hài hòa giữa hương vị trà thơm ngon và độ ngọt mát của đào. Thạch đào thêm sự giòn và ngon miệng, tạo nên một thức uống trà sữa phổ biến và thơm ngon, đặc biệt là trong thời tiết nóng.', 'còn bán'),
+('Trà Thạch Vải', 50000, 1, '2020-01-01 00:00:00', '2021-08-15 16:03:56', 'https://i.pinimg.com/564x/2a/f6/3f/2af63fb235f30c49422674ade7cf0b02.jpg', '
+Trà thạch vải là một loại thức uống phổ biến, thường được phục vụ trong các quán trà sữa và cà phê.', 'Trà thạch vải mang đến hương vị ngọt ngào và tươi mới của trà kết hợp với độ giòn mát từ thạch vải. Đây là một thức uống thơm ngon và phổ biến trong mùa hè, đặc biệt là khi thưởng thức cùng đá. Thạch vải thêm sự ngon miệng và độ giòn, tạo nên một trải nghiệm thưởng thức thú vị.', 'còn bán'),
+('Trà Đào', 50000, 1, '2020-01-01 00:00:00', '2021-08-15 16:20:56', 'https://i.pinimg.com/564x/ac/b3/4e/acb34e7aa86f8f448a4d011fcb873034.jpg', 'Trà đào là một loại thức uống thơm ngon và phổ biến, thường được phục vụ trong các quán trà sữa, cà phê, hoặc tự làm tại nhà.', 'Trà đào là một thức uống tuyệt vời, kết hợp hương vị đậm đà của trà với hương thơm tinh tế và ngọt ngào của đào. Thêm đào tươi hoặc đào đóng hộp mang lại độ giòn và ngon miệng cho thức uống. Trà đào có thể được thưởng thức ấm nóng hoặc lạnh với đá tùy theo sở thích cá nhân.', 'còn bán'),
+('Cà Phê Đá', 30000, 4, '2020-01-01 00:00:00', '2021-08-15 16:42:56', 'https://i.pinimg.com/564x/fd/f5/f8/fdf5f86970dceb814cee1d109aaa887b.jpg', 'Cà phê đá là một thức uống phổ biến và truyền thống ở nhiều nơi trên thế giới, đặc biệt là trong vùng Đông Nam Á.', 'Cà phê đá là một thức uống giải nhiệt và sảng khoái, phổ biến trong môi trường nhiệt đới. Hương vị đắng của cà phê kết hợp với hương thơm của đá tạo nên một thức uống sảng khoái và thú vị. Cà phê đá thường là lựa chọn lý tưởng cho những ngày nắng nóng và là một phần không thể thiếu trong văn hóa thức uống của nhiều quốc gia.', 'còn bán'),
+('Trà Sữa Trân Châu Đường Đen', 30000, 1, '2020-01-01 00:00:00', '2021-08-15 16:42:56', 'https://i.pinimg.com/564x/b4/61/b6/b461b6b7821abae465fe5fba0eb52411.jpg', 'Trà sữa trân châu đường đen là một phiên bản đặc biệt của thức uống trà sữa trân châu, thường có hương vị thơm ngon, đặc trưng và ngọt ngào từ đường đen.', 'Trà sữa trân châu đường đen là một thức uống phổ biến với hương vị độc đáo từ đường đen và độ ngon miệng của trân châu. Thức uống này thường được thưởng thức với đá, tạo ra sự mát lạnh và phổ biến trong cộng đồng người hâm mộ trà sữa.', 'còn bán'),
+('Trà Sữa Dâu', 30000, 1, '2020-01-01 00:00:00', '2021-08-15 16:10:56', 'https://i.pinimg.com/564x/55/d8/e8/55d8e8a663e460bc6ae5ee700856b26a.jpg', 'Trà sữa dâu là một biến thể thơm ngon và mát lạnh của thức uống trà sữa, với hương vị tự nhiên và ngọt ngon của dâu.', 'Trà sữa dâu là một thức uống mát lạnh và thơm ngon, kết hợp hương vị ngọt ngào tự nhiên của dâu với hương thơm của trà. Thức uống này thường là sự lựa chọn yêu thích trong mùa hè và là một cách tuyệt vời để thưởng thức hương vị tươi mới và tự nhiên của dâu.', 'tạm ngưng'),
+('Trà Trái Cây', 32000, 1, '2020-01-01 00:00:00', '2021-08-15 16:42:56', 'https://i.pinimg.com/736x/b3/fb/3c/b3fb3c5d95c53b1ee4f61289d9708349.jpg', 'Trà trái cây là một loại thức uống thơm ngon và sảng khoái, được làm từ trà kết hợp với các loại trái cây tươi hoặc trái cây đã đóng đóng hộp.', 'Trà trái cây là một thức uống mát lạnh và ngon miệng, kết hợp hương vị đặc trưng của trà với hương thơm và ngọt ngào của các loại trái cây. Thức uống này thường được thưởng thức trong những ngày nắng nóng và là lựa chọn phổ biến trong các quán trà sữa và cà phê.', 'còn bán'),
+('Hồng Trà', 30000, 1, '2020-01-01 00:00:00', '2021-08-15 16:42:56', 'https://i.pinimg.com/564x/3c/01/30/3c0130fdbdfb70047d0e9d7ced83493f.jpg', '
+Hồng trà là một loại trà được làm từ lá trà hồng, còn được biết đến với tên gọi "black tea" trong tiếng Anh. Hồng trà có màu đỏ nâu đậm và có hương vị đặc trưng và phức tạp, thường mang theo những đặc điểm của trái cây, gỗ, hoặc các hương vị khác tùy thuộc vào quốc gia sản xuất và phương pháp chế biến.', 'Hồng trà là một loại trà phổ biến và thơm ngon, thường được thưởng thức ấm nóng vào buổi sáng hoặc lạnh vào những ngày nóng.', 'còn bán'),
+('Bánh Tiramisu', 35000, 2, '2020-01-01 00:00:00', '2021-08-15 16:57:56', 'https://i.pinimg.com/564x/5e/09/c8/5e09c81bd1cd40ecb3bb4e5c7c0dcb0d.jpg', 'Bánh Tiramisu là một loại bánh ngọt xuất phát từ Ý, được biết đến với hương vị đặc trưng của cà phê và mascarpone.', 'Bánh Tiramisu là một tác phẩm ngọt ngào với hương vị đặc trưng của cà phê, mascarpone mềm mại, và hương thơm của vani. Được xếp lớp giữa bánh ladyfingers ẩm đượm cà phê, Tiramisu thường được coi là một trong những món tráng miệng hấp dẫn và phổ biến trong ẩm thực Ý.', 'còn bán'),
+('Trà Chanh', 30000, 1, '2020-01-01 00:00:00', '2021-08-15 12:42:56', 'https://i.pinimg.com/564x/84/c3/0d/84c30d782d3b2bd923456acd5b5b0786.jpg', 'Trà chanh là một thức uống phổ biến và sảng khoái, thường được thưởng thức ở nhiều quốc gia trên thế giới.', 'Trà chanh là một thức uống đơn giản nhưng thơm ngon, kết hợp hương thơm của trà với chua chua, ngọt ngọt và sảng khoái của chanh. Thức uống này có thể được thưởng thức ấm nóng vào mùa đông hoặc lạnh và đáng mát vào mùa hè, là lựa chọn phổ biến để giải khát và thưởng thức.', 'còn bán'),
+('Bánh Đồng Xu', 20000, 2, '2020-01-01 00:00:00', '2021-08-15 16:13:57', 'https://i.pinimg.com/564x/f8/8f/58/f88f5819be06576be605fd07b91bca00.jpg', 'Bánh đồng xu là món ăn đường phố khá nổi tiếng ở Hàn Quốc.', 'Phần vỏ bánh rất xốp mềm, không bị bở hay quá cứng. Còn nhân phô mai béo ngậy, mằn mặn vô cùng ngon miệng', 'còn bán'),
+('Bánh Quy', 19000, 2, '2020-01-01 00:00:00', '2021-08-15 16:28:57', 'https://i.pinimg.com/564x/3b/83/7e/3b837e287f86de286d020d97e40a75bb.jpg', '"Bánh quy" là một thuật ngữ chung để mô tả một loại bánh ngọt và giòn thường được làm từ bột, đường, và bơ. Bánh quy có nhiều loại và biến thể khác nhau tùy thuộc vào các thành phần và cách chế biến', 'Bánh quy là một loại bánh ngọt và giòn, thường được thưởng thức kèm với trà hoặc cà phê. Hương vị và độ giòn của bánh quy có thể thay đổi tùy thuộc vào thành phần và phương pháp nấu nướng cụ thể được sử dụng. Bánh quy là một lựa chọn phổ biến trong các buổi tiệc và làm quà biếu do vị giòn ngon và khả năng bảo quản tốt.', 'còn bán'),
+('Cafe Phindi Hồng Trà', 35000, 4, '2020-01-01 00:00:00', '2021-08-15 17:03:01', 'https://www.highlandscoffee.com.vn/vnt_upload/news/12_2020/OB12-KV-FINAL.jpg', 'Cafe Phindi Hồng Trà là một thức uống kết hợp giữa cà phê và hồng trà hoặc một loại cà phê được pha chế với hương vị của hồng trà.', 'Cafe Phindi Hồng Trà là một sự kết hợp độc đáo giữa hương vị cà phê và hồng trà, tạo ra một thức uống thơm ngon, hấp dẫn và đầy đặc sắc. Sự kết hợp của hương vị cà phê đậm đà và hương thơm nhẹ nhàng của hồng trà tạo nên một trải nghiệm đặc biệt cho người yêu thưởng thức đồ uống.', 'còn bán'),
+('Cafe Phindi Kem Sữa', 35000, 4, '2020-01-01 00:00:00', '2021-08-15 17:28:01', 'https://www.highlandscoffee.com.vn/vnt_upload/news/09_2020/Screen_Shot_2020-09-12_at_12.12.36.png', 'Cafe Phindi Kem Sữa là một loại thức uống cà phê kết hợp với kem sữa hoặc một loại cà phê được phục vụ với một lớp kem sữa béo ngậy trên cùng.', 'Cafe Phindi Kem Sữa à một thức uống cà phê mượt mà và thơm ngon, kết hợp hương vị đậm đà của cà phê với độ béo ngậy và mềm mại của kem sữa. Đây là một lựa chọn phổ biến trong menu cà phê, đặc biệt là trong những ngày nóng để thưởng thức một cách đặc biệt và ngon miệng.', 'còn bán');
 
 
 INSERT INTO orders (`fullname`, `phone`,`address`, `note`, `date`, `state`) VALUES ('Đinh Chu Hoàng', 10000000,'Quận 5', '', '2023-01-01 15:43:24', 'Đang xử lý');
@@ -6127,3 +6130,123 @@ INSERT INTO order_details (`id`, `idprod`, `num`) VALUES (2007, 17, 3);
 INSERT INTO orders (`fullname`, `phone`,`address`, `note`, `date`, `state`) VALUES ('Hoàng Dương Phan', 10002007,'Quận 5', 'Ngọt bình thường', '2023-11-30 11:21:58', 'Đã thanh toán');
 INSERT INTO order_details (`id`, `idprod`, `num`) VALUES (2008, 19, 1);
 INSERT INTO order_details (`id`, `idprod`, `num`) VALUES (2008, 20, 2);
+/*-------------------------------------------------------------------------*/
+-- TỔNG DOANH THU CỦA TỪNG SẢN PHẨM
+DROP PROCEDURE IF EXISTS GetProductRevenue;
+DELIMITER //
+
+CREATE PROCEDURE GetProductRevenue()
+BEGIN
+    SELECT
+        p.id AS ID,
+        p.title AS TênSảnPhẩm,
+        c.name AS LoạiSP,
+        SUM(od.num * p.price) AS TổngDoanhThu
+    FROM
+        product p
+    INNER JOIN
+        category c ON p.idcate = c.id
+    LEFT JOIN
+        order_details od ON p.id = od.idprod
+    LEFT JOIN
+        orders o ON od.id = o.id
+    WHERE
+        o.state IN ('Đã thanh toán')
+    GROUP BY
+        p.id, p.title, c.name;
+END //
+
+DELIMITER ;
+
+CALL GetProductRevenue();
+
+/*-------------------------------------------------------------------------*/
+-- DOANH THU CỦA MỖI THÁNG
+DROP PROCEDURE IF EXISTS GetMonthlyRevenue;
+DELIMITER //
+
+CREATE PROCEDURE GetMonthlyRevenue()
+BEGIN
+    SELECT
+        YEAR(o.date) AS Năm,
+        MONTH(o.date) AS Tháng,
+        SUM(od.num * p.price) AS DoanhThu
+    FROM
+        orders o
+    INNER JOIN
+        order_details od ON o.id = od.id
+    INNER JOIN
+        product p ON od.idprod = p.id
+    WHERE
+        o.state IN ('Đã thanh toán')
+    GROUP BY
+        YEAR(o.date), MONTH(o.date)
+    ORDER BY
+        YEAR(o.date), MONTH(o.date);
+END //
+
+DELIMITER ;
+
+CALL GetMonthlyRevenue();
+/*-------------------------------------------------------------------------*/
+-- DOANH THU THEO QUÝ
+DROP PROCEDURE IF EXISTS GetQuarterlyRevenue;
+
+DELIMITER //
+
+CREATE PROCEDURE GetQuarterlyRevenue()
+BEGIN
+    SELECT
+        YEAR(o.date) AS Năm,
+        QUARTER(o.date) AS Quý,
+        SUM(od.num * p.price) AS DoanhThu
+    FROM
+        orders o
+    INNER JOIN
+        order_details od ON o.id = od.id
+    INNER JOIN
+        product p ON od.idprod = p.id
+    WHERE
+        o.state IN ('Đã thanh toán')
+    GROUP BY
+        YEAR(o.date), QUARTER(o.date)
+    ORDER BY
+        YEAR(o.date), QUARTER(o.date);
+END //
+
+DELIMITER ;
+
+CALL GetQuarterlyRevenue;
+
+/*-------------------------------------------------------------------------*/
+-- DOANH THU CỦA TỪNG SẢN PHẨM TRONG TỪNG THÁNG
+DROP PROCEDURE IF EXISTS GetProductMonthlyRevenue;
+
+DELIMITER //
+
+CREATE PROCEDURE GetProductMonthlyRevenue()
+BEGIN
+    SELECT
+        p.id AS ID,
+        p.title AS TênSảnPhẩm,
+        YEAR(o.date) AS Năm,
+        MONTH(o.date) AS Tháng,
+        SUM(od.num * p.price) AS DoanhThu
+    FROM
+        orders o
+    INNER JOIN
+        order_details od ON o.id = od.id
+    INNER JOIN
+        product p ON od.idprod = p.id
+    WHERE
+        o.state IN ('Đã thanh toán')
+    GROUP BY
+        p.id, p.title, YEAR(o.date), MONTH(o.date)
+    ORDER BY
+        p.id, YEAR(o.date), MONTH(o.date);
+END //
+
+DELIMITER ;
+
+CALL GetProductMonthlyRevenue;
+/*-------------------------------------------------------------------------*/

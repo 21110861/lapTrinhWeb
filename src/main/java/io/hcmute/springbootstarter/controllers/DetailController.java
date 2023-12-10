@@ -1,26 +1,44 @@
 package io.hcmute.springbootstarter.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import io.hcmute.springbootstarter.models.History;
 import io.hcmute.springbootstarter.models.Product;
 import io.hcmute.springbootstarter.services.ProductService;
+
 @Controller
 public class DetailController {
-	@Autowired
-	ProductService productService;
-	
-	@GetMapping("/detail/{cateid}/{proid}")
-	public String findDetailsAboutProducts(@PathVariable int cateid,@PathVariable int proid, Model model) {
-		List<Product> products = productService.getAllActiveProductsByCategory(cateid, "còn bán");
-		model.addAttribute("products", products);
-		
-		return "shop-details";
-		
-	}
+    @Autowired
+    ProductService productService;
+    Product productWantToView = null;
+    List<Product> historyProducts = new ArrayList<>();
+    List<Product> sameCategoryProducts = new ArrayList<>();
+    @GetMapping("/detail")
+    public String viewProductDetail(Model model) {
+    	 model.addAttribute("listproducts", sameCategoryProducts);
+         model.addAttribute("chosenProduct", productWantToView);
+         System.out.println("getmapping");
+         model.addAttribute("listHistoryProducts", historyProducts);
+        return "shop-details";
+    }
+
+    @PostMapping("/detail")
+    public ResponseEntity<?> findDetailsAboutProducts(@RequestBody  History history) {
+        this.productWantToView = productService.getProduct(history.latestId);
+        System.out.println("infor=" +this.productWantToView.getInformation());
+        this.sameCategoryProducts = productService.getAllActiveProductsByCategory(productWantToView.getCategory().getId(), "còn bán");
+        this.historyProducts = productService.getAllProductsFromListId(history.historyList);
+        return ResponseEntity.status(HttpStatus.OK).body("ổn");
+    }
 }
+

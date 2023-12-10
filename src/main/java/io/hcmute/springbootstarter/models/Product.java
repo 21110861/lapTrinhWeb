@@ -26,9 +26,43 @@ public class Product {
 	private Date createdat;
 	private Date updatedat;
 	private String image = "https://www.voilah.sg/wp-content/uploads/2020/11/attention-icon-2.png";
+	private String information;
+	private String description;
 	private String status = "còn bán";
 	public Product() {
 	}
+	
+	public Product(int id, String title, int price, Category category, Date createdat, Date updatedat, String image,
+			String information, String description, String status) {
+		super();
+		this.id = id;
+		this.title = title;
+		this.price = price;
+		this.category = category;
+		this.createdat = createdat;
+		this.updatedat = updatedat;
+		this.image = image;
+		this.information = information;
+		this.description = description;
+		this.status = status;
+	}
+
+	public String getInformation() {
+		return information;
+	}
+
+	public void setInformation(String information) {
+		this.information = information;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	public Product(int id, String title, int price, Category category, Date createdat, Date updatedat, String image,
 			String status) {
 		super();

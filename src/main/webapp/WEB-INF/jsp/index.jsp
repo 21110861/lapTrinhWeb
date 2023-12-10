@@ -79,20 +79,34 @@
                 <!-- Product Section End -->
                 <script>
                     function viewDetail(productId) {
-                        sessionStorage.setItem("latestId",productId);
-                        // Lưu trữ thông tin sản phẩm vào localStorage
+                        sessionStorage.setItem("latestId", productId);
                         var productIds = JSON.parse(localStorage.getItem('historyProduct')) || [];
-                        
-                        
+
                         if (!productIds.includes(productId)) {
-                           
                             productIds.push(productId);
                             localStorage.setItem('historyProduct', JSON.stringify(productIds));
                         }
-
-                        // Tiến hành chuyển hướng đến trang detail
-                        window.location.href = "/detail";
+                        var data = {
+                            historyList: productIds,
+                            latestId: productId
+                        };
+                        console.log("tại sao nó lại không được")
+                        fetch('/detail', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(data),
+                        })
+                            .then(response => response.text())
+                            .then(result => {
+                                window.location.href = "/detail"; // Chỉ cần truyền URL của trang "detail" là đủ
+                            })
+                            .catch((error) => {
+                                console.error('Error:', error);
+                            });
                     }
+
 
                 </script>
                 <jsp:include page="/WEB-INF/jsp/footer.jsp" />

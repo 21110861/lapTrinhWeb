@@ -56,4 +56,15 @@ public class ProductService {
 	 public void saveProduct(Product product) {
 	        productRepository.save(product);
 	    }
+
+	public List<Product> getAllProductsFromListId(List<Integer> historyList) {
+		List<Product> list = new ArrayList<>();
+		for(Integer item : historyList) {
+			Product temp = productRepository.findById(item).orElse(null);
+			if(temp != null) {
+				list.add(temp);
+			}
+		}
+		return list;
+	}
 }
