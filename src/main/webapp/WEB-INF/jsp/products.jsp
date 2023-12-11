@@ -49,13 +49,6 @@
                     <div>
                         <h2>Manage Products</h2>
                     </div>
-                    <div class="m-2">
-                        <a class="h3" href="/admin/products/new">Add New Product</a>
-                    </div>
-                    <div th:if="${message}" class="alert alert-success text-center">
-                        [[${message}]]
-                    </div>
-
                     <div>
                         <table class="table table-bordered" id="productTable">
                             <thead class="thead-dark">
@@ -102,13 +95,15 @@
                                         <td>${product.description}</td>
                                         <td>
                                             <div>
-                                                <a class="h4" href="/admin/products/edit/${product.id}">Edit</a>
+                                                <a class="h4" id="edit-btn"
+                                                    onclick="editProduct(${product.id})">Edit</a>
                                             </div>
                                             <div>
                                                 <span class="btn-separator"></span>
                                             </div>
                                             <div>
-                                                <a class="h4"="delete-btn" onclick="deleteRow(${product.id})">Delete</a>
+                                                <a class="h4" id="delete-btn"
+                                                    onclick="deleteRow(${product.id})">Delete</a>
                                             </div>
                                             <div>
                                                 <span class="btn-separator"></span>
@@ -122,10 +117,11 @@
                             <tfoot>
                                 <tr>
                                     <td></td>
-                                    <td><input type="text" id="newProductImage" style="width: 95px;"
+                                    <td><input type="url" id="newProductImage" style="width: 95px;"
                                             placeholder="Image URL" /></td>
                                     <td><input type="text" id="newProductTitle" placeholder="Title" /></td>
-                                    <td><input type="text" id="newProductPrice" style="width: 95px;" placeholder="Price" /></td>
+                                    <td><input type="number" id="newProductPrice" style="width: 95px;"
+                                            placeholder="Price" /></td>
                                     <td>
                                         <select id="newProductCategory">
                                             <c:forEach var="category" items="${listCategories}">
@@ -141,8 +137,10 @@
                                             <option value="tạm ngưng">Tạm ngưng</option>
                                         </select>
                                     </td>
-                                    <td><textarea id="newProductInformation" placeholder="Information" style="width: 100%;"></textarea></td>
-                                    <td><textarea id="newProductDescription" placeholder="Description" style="width: 100%;"></textarea></td>
+                                    <td><textarea id="newProductInformation" placeholder="Information"
+                                            style="width: 100%;"></textarea></td>
+                                    <td><textarea id="newProductDescription" placeholder="Description"
+                                            style="width: 100%;"></textarea></td>
                                     <td><button class="btn btn-primary" onclick="addNewProduct()">Add</button></td>
                                 </tr>
                             </tfoot>
@@ -252,7 +250,7 @@
                             .then(response => {
                                 if (response.ok) {
                                     // Xóa dòng trong giao diện
-                                    var row = document.getElementById('row-'+productId);
+                                    var row = document.getElementById('row-' + productId);
                                     row.parentNode.removeChild(row);
                                 } else {
                                     console.error('Failed to delete product');
@@ -260,6 +258,103 @@
                             })
                             .catch(error => console.error('Error:', error));
                     }
+                    function editProduct(productId) {
+                        // Lấy ra các element trên dòng có id là `row-productId`
+                        var row = document.getElementById('row-' + productId);
+                        var titleElement = row.cells[2];
+                        var priceElement = row.cells[3];
+                        var imageElement = row.cells[1];
+                        var categoryElement = row.cells[4];
+                        var statusElement = row.cells[7];
+                        var informationElement = row.cells[8];
+                        var descriptionElement = row.cells[9];
+                        var editButton = row.cells[10].querySelector('.h4');
+                        var currentPriceValue = priceElement.textContent.replace(/,/g, '');
+                        // Thay thế các giá trị hiện tại bằng các input/textarea/select tương ứng
+                        titleElement.innerHTML = '<input type="text" id="editedTitle" value="' + titleElement.textContent + '"/>';
+                        priceElement.innerHTML = '<input type="number" id="editedPrice" value="' + parseInt(currentPriceValue) + '"/>';
+                        imageElement.innerHTML = '<input type="url" id="editedImage" value="' + imageElement.querySelector('img').src + '"/>';
+
+                        // Lấy danh sách danh mục từ API bằng fetch
+                        fetch('/admin/categories', {
+                            method: 'POST'
+                        })
+                            .then(response => response.json())
+                            .then(categories => {
+                                var selectOptions = categories.map(category => '<option value="' + category.id + '">' + category.name + '</option>');
+                                categoryElement.innerHTML = '<select id="editedCategory">' + selectOptions.join('') + '</select>';
+                            })
+                            .catch(error => console.error('Error fetching categories:', error));
+
+                        statusElement.innerHTML = '<select id="editedStatus">' +
+                            '<option value="còn bán">Còn bán</option>' +
+                            '<option value="tạm ngưng">Tạm ngưng</option>' +
+                            '</select>';
+                        informationElement.innerHTML = '<textarea id="editedInformation" style="width: 100%;">' + informationElement.textContent + '</textarea>';
+                        descriptionElement.innerHTML = '<textarea id="editedDescription" style="width: 100%;">' + descriptionElement.textContent + '</textarea>';
+
+                        // Thay thế nút "Edit" thành nút "Save" với sự kiện lưu trạng thái
+                        editButton.textContent = 'Save';
+                        editButton.setAttribute('onclick', 'saveProduct(' + productId + ')');
+                    }
+                    function saveProduct(productId) {
+                        // Lấy ra các giá trị từ các input/textarea/select đã chỉnh sửa
+                        var editedTitle = document.getElementById('editedTitle').value;
+                        var editedPrice = document.getElementById('editedPrice').value;
+                        var editedImage = document.getElementById('editedImage').value;
+                        var editedCategorySelect = document.getElementById('editedCategory');
+                        var selectedOption = editedCategorySelect.options[editedCategorySelect.selectedIndex];
+                        var editedCategoryText = selectedOption.innerText;
+
+
+
+                        var editedStatus = document.getElementById('editedStatus').value;
+                        var editedInformation = document.getElementById('editedInformation').value;
+                        var editedDescription = document.getElementById('editedDescription').value;
+                        var data = {
+                            "id": productId,
+                            "title": editedTitle,
+                            "price": parseInt(editedPrice), // Chuyển đổi thành số
+                            "category": {
+                                "id": parseInt(editedCategorySelect.value) // Chuyển đổi thành số
+                            },
+                            "image": editedImage,
+                            "status": editedStatus,
+                            "information": editedInformation,
+                            "description": editedDescription
+                        };
+
+                        fetch('/admin/products/', {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(data)
+                        })
+                            .then(response => response.json())
+                            .then(result => {
+                                console.log('Update successful:', result);
+                            })
+                            .catch(error => {
+                                console.error('Error updating product:', error);
+                                window.location.href="/admin/products";
+                            });
+                        // Gán giá trị đã chỉnh sửa vào các cell tương ứng
+                        var row = document.getElementById('row-' + productId);
+                        row.cells[2].textContent = editedTitle;
+                        row.cells[3].textContent = parseInt(editedPrice).toLocaleString();
+                        row.cells[1].innerHTML = '<img src="' + editedImage + '" alt="Product Image" style="max-width: 100px; max-height: 100px;" />';
+                        row.cells[4].textContent = editedCategoryText;
+                        row.cells[7].textContent = editedStatus;
+                        row.cells[8].textContent = editedInformation;
+                        row.cells[9].textContent = editedDescription;
+
+                        // Thay thế nút "Save" thành nút "Edit" với sự kiện chỉnh sửa
+                        var editButton = row.cells[10].querySelector('.h4');
+                        editButton.textContent = 'Edit';
+                        editButton.setAttribute('onclick', 'editProduct(' + productId + ')');
+                    }
+
                 </script>
 
 

@@ -117,6 +117,7 @@
                 var currentUrl = '/shop/load-more';
                 var keyword = "";
                 var sort = "#";
+                var clickSort = false;
                 $(document).ready(function () {
                     loadProducts(currentUrl, { page: page, pageSize: pageSize });
 
@@ -130,8 +131,10 @@
                 function loadPage(newPage) {
                     page = newPage;
                     
-
-                    loadProducts(currentUrl, { page: page, pageSize: pageSize, keyword: keyword });
+                    if(clickSort == false)
+                        loadProducts(currentUrl, { page: page, pageSize: pageSize, keyword: keyword });
+                    else
+                        loadSortProducts("/shop/sort", null, sort, page, pageSize);
 
                 }
                 function loadProducts(endUrl, data) {
@@ -207,6 +210,7 @@
                     totalQuantityDisplay.textContent = cartItems.length.toString() + " món";
                 }
                 function search() {
+                    clickSort = false;
                     keyword = document.getElementById('searchInput').value;
                     if (keyword.length > 0) {
                         currentUrl = '/shop/search/';
@@ -218,6 +222,7 @@
                     loadProducts(currentUrl, { page: page, pageSize: pageSize, keyword: keyword });
                 }
                 function filter() {
+                    clickSort = false;
                     keyword = parseInt(document.getElementById('categorySelect').value);
                     if (keyword != 0) {
                         currentUrl = "/shop/filter";
@@ -230,6 +235,7 @@
                     loadProducts(currentUrl, { page: page, pageSize: pageSize, keyword: keyword });
                 }
                 function sorting() {
+                    clickSort = true;
                     var listProduct = parseProduct();
                     var lastTypeSort = document.getElementById('orderSelect').value;
                     if (sort != lastTypeSort) {

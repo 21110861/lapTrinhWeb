@@ -2,6 +2,7 @@ package io.hcmute.springbootstarter.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,13 @@ public class UsersService {
 		if (findUser != null)
 			return true;
 		return false;
+	}
+
+	public void updateUser(Users user) {
+		Optional<Users> old = userRepository.findById(user.getId());
+		if(old.isPresent()) {
+			user.setPass(old.get().getPass());
+		}
 	}
 
 }

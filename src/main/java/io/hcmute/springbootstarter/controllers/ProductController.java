@@ -1,6 +1,7 @@
 package io.hcmute.springbootstarter.controllers;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.sql.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +23,6 @@ public class ProductController {
 	@Autowired
 	private CategoryService categoryService;
 
-	
-	
-
-	
-
-
-
 	@GetMapping("/admin/products")
 	public String showProductList(Model model) {
 		List<Product> listProducts = productService.getAllProducts();
@@ -46,7 +40,7 @@ public class ProductController {
 
 	@PostMapping("/admin/products/save")
 	public String saveProduct(Product product, RedirectAttributes ra) {
-		product.setUpdatedat(new Date());
+		product.setUpdatedat(Date.valueOf(LocalDate.now()));
 		productService.saveProduct(product);
 		ra.addFlashAttribute("message", "The Product has been saved successfully.");
 		return "redirect:/admin/products";
@@ -60,7 +54,7 @@ public class ProductController {
 		}
 
 		// Thực hiện logic thêm sản phẩm mới
-		Date today = new Date();
+		Date today = Date.valueOf(LocalDate.now());
 		newProduct.setCreatedat(today);
 		newProduct.setUpdatedat(today);
 		Product addedProduct = productService.addProduct(newProduct);
@@ -97,17 +91,16 @@ public class ProductController {
 	}
 
 	@DeleteMapping("/admin/products/delete/{productId}")
-    public ResponseEntity<String> deleteProduct(@PathVariable int productId) {
-		System.out.println("here?"+productId);
-        try {
-            // Gọi service để xóa sản phẩm dựa trên ID
-            productService.deleteProduct(productId);
-            return ResponseEntity.ok("Product deleted successfully");
-        } catch (Exception e) {
-        	System.err.println(e.getMessage());
-            return ResponseEntity.status(500).body("Failed to delete product");
-        }
-    }
+	public ResponseEntity<String> deleteProduct(@PathVariable int productId) {
+		try {
+			// Gọi service để xóa sản phẩm dựa trên ID
+			productService.deleteProduct(productId);
+			return ResponseEntity.ok("Product deleted successfully");
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+			return ResponseEntity.status(500).body("Failed to delete product");
+		}
+	}
 
 	@GetMapping("/admin/products/search")
 	public String searchByIdForm(Model model) {
@@ -130,4 +123,15 @@ public class ProductController {
 			return "redirect:/admin/products";
 		}
 	}
+
+	@PutMapping("/admin/products")
+	public ResponseEntity<?> updateProduct(@RequestBody Product product) {
+		Date today = Date.valueOf(LocalDate.now());
+		Product old = productService.getProduct(product.getId());
+		product.setUpdatedat(today);
+		product.setCreatedat(old.getCreatedat());
+		productService.updateProduct(product);
+		return ResponseEntity.status(HttpStatus.OK).body("thành công");
+	}
+
 }

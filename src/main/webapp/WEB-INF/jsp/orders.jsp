@@ -80,7 +80,7 @@
                                     </td>
                                     <td>
                                         <span style="margin-right: 20px;">
-                                            <a class="h4" href="/admin/orders/edit/${order.id}">Edit</a>
+                                            <a class="h4" onclick="editRow(${order.id})">Edit</a>
                                         </span>
 
                                         <span>
@@ -93,25 +93,104 @@
                     </table>
                 </div>
             </div>
-            function deleteRow(userId) {
-            fetch('/admin/users/delete/' + userId, {
-            method: 'DELETE',
-            headers: {
-            'Content-Type': 'application/json'
-            },
-            body: null
-            })
-            .then(response => {
-            if (response.ok) {
-            // Xóa dòng trong giao diện
-            var row = document.getElementById('row-' + userId);
-            row.parentNode.removeChild(row);
-            } else {
-            console.error('Failed to delete user');
-            }
-            })
-            .catch(error => console.error('Error:', error));
-            }
+            <script>
+                function editRow(orderId) {
+                    var row = document.getElementById('row-' + orderId);
+                    var fullnameElement = row.cells[1];
+                    var phoneElement = row.cells[2];
+                    var addressElement = row.cells[3];
+                    var noteElement = row.cells[4];
+                    var dateElement = row.cells[5];
+                    var stateElement = row.cells[6];
+                    var editButton = row.cells[7].querySelector('.h4');
+
+                    // Replace current values with input/textarea/select
+                    fullnameElement.innerHTML = '<input type="text" id="editedFullname" value="' + fullnameElement.textContent + '"/>';
+                    phoneElement.innerHTML = '<input type="text" id="editedPhone" value="' + phoneElement.textContent + '"/>';
+                    addressElement.innerHTML = '<input type="text" id="editedAddress" value="' + addressElement.textContent + '"/>';
+                    noteElement.innerHTML = '<textarea id="editedNote" style="width: 100%;">' + noteElement.textContent + '</textarea>';
+                    dateElement.innerHTML = '<input type="text" readonly id="editedDate" value="' + dateElement.textContent + '"/>';
+
+                    // Assuming state is a text field, not a dropdown
+                    stateElement.innerHTML = '<input type="text" id="editedState" value="' + stateElement.textContent + '"/>';
+
+                    // Replace "Edit" button with "Save" button
+                    editButton.textContent = 'Save';
+                    editButton.setAttribute('onclick', 'saveRow(' + orderId + ')');
+                }
+
+                function saveRow(orderId) {
+                    // Get edited values from input/textarea/select
+                    var editedFullname = document.getElementById('editedFullname').value;
+                    var editedPhone = document.getElementById('editedPhone').value;
+                    var editedAddress = document.getElementById('editedAddress').value;
+                    var editedNote = document.getElementById('editedNote').value;
+                    var editedDate = document.getElementById('editedDate').value;
+                    var editedState = document.getElementById('editedState').value;
+
+                    var data = {
+                        "id": orderId,
+                        "fullname": editedFullname,
+                        "phone": editedPhone,
+                        "address": editedAddress,
+                        "note": editedNote,
+                        "date": editedDate,
+                        "state": editedState
+                    };
+
+                    // Perform fetch to update the order
+                    fetch('/admin/orders', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    })
+                        .then(response => response.json())
+                        .then(result => {
+                            console.log('Update successful:', result);
+                        })
+                        .catch(error => {
+                            console.error('Error updating order:', error);
+                            window.location.href = "/admin/orders";
+                        });
+
+                    // Update the table cells with edited values
+                    var row = document.getElementById('row-' + orderId);
+                    row.cells[1].textContent = editedFullname;
+                    row.cells[2].textContent = editedPhone;
+                    row.cells[3].textContent = editedAddress;
+                    row.cells[4].textContent = editedNote;
+                    row.cells[5].textContent = editedDate;
+                    row.cells[6].textContent = editedState;
+
+                    // Replace "Save" button with "Edit" button
+                    var editButton = row.cells[7].querySelector('.h4');
+                    editButton.textContent = 'Edit';
+                    editButton.setAttribute('onclick', 'editRow(' + orderId + ')');
+                }
+
+                function deleteRow(orderId) {
+                    fetch('/admin/orders/delete/' + orderId, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: null
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                // Xóa dòng trong giao diện
+                                var row = document.getElementById('row-' + orderId);
+                                row.parentNode.removeChild(row);
+                            } else {
+                                console.error('Failed to delete user');
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                }
+            </script>
+
         </body>
 
         </html>

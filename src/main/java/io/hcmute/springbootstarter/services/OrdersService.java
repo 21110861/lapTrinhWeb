@@ -1,6 +1,7 @@
 package io.hcmute.springbootstarter.services;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,7 +23,7 @@ public class OrdersService {
 	}
 
 	public String addOrder(CheckoutRequest data) {
-		Orders order = new Orders(data.getName(), data.getPhone(), data.getAddress(), data.getNote(), new Date(),
+		Orders order = new Orders(data.getName(), data.getPhone(), data.getAddress(), data.getNote(), Date.valueOf(LocalDate.now()),
 				"Đang xử lý");
 		ordersRepository.save(order);
 		
@@ -41,9 +42,7 @@ public class OrdersService {
 	}
 
 	public void findAndUpdate(String orderId) {
-		System.out.println("string id="+orderId);
 		int id = Integer.valueOf(orderId);
-		System.out.println("id="+id);
 		Optional<Orders> order = ordersRepository.findById(id);
 		Orders neworder = order.orElse(null);
 		neworder.setState("Đã thanh toán");

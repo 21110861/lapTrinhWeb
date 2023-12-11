@@ -46,16 +46,17 @@ public class ShopController {
 	@PostMapping("/shop/sort")
 	@ResponseBody
 	public List<Product> sortProduct(@RequestBody SortRequest sortData) {
-		for(int i = 0; i < sortData.listProduct.size(); ++i)
-			System.out.println("giá trước="+ sortData.listProduct.get(i));
 		if (!last.lastTypeSort.equals(sortData.lastTypeSort)) {
 			last.lastTypeSort = sortData.lastTypeSort;
-			last = sorting(sortData);
+			last.listProduct = productService.getAllActiveProducts();
+					
+			last = sorting(last);
 		}
 		int start = sortData.page * 10;
-		int end = Math.min((start + 10), sortData.listProduct.size());
-		
-		return last.listProduct.subList(start, end);
+
+		int end = Math.min((start + 10), last.listProduct.size());
+		List<Product> temp = last.listProduct.subList(start, end);
+		return temp;
 
 	}
 
@@ -67,7 +68,8 @@ public class ShopController {
 			break;
 		case "2":
 			// Sắp xếp Z-A theo tiêu đề
-			Collections.sort(last.listProduct, Comparator.comparing(Product::getTitle, String.CASE_INSENSITIVE_ORDER).reversed());
+			Collections.sort(last.listProduct,
+					Comparator.comparing(Product::getTitle, String.CASE_INSENSITIVE_ORDER).reversed());
 			break;
 		case "3":
 			// Sắp xếp theo giá tăng dần

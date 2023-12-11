@@ -7,8 +7,8 @@ use webtrasua;
 CREATE TABLE `category` (
   `id` int(11) NOT NULL AUTO_INCREMENT primary key,
   `name` nvarchar(50) NOT NULL,
-  `createdat` datetime DEFAULT NULL,
-  `updatedat` datetime DEFAULT NULL,
+  `createdat` date DEFAULT NULL,
+  `updatedat` date DEFAULT NULL,
   `image` varchar(500) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -18,7 +18,7 @@ CREATE TABLE `orders` (
   `phone` varchar(20) NOT NULL,
   `address` varchar(200) NOT NULL,
   `note` varchar(255) DEFAULT NULL,
-  `date` datetime DEFAULT NULL,
+  `date` date DEFAULT NULL,
   `state` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -28,8 +28,8 @@ CREATE TABLE `product` (
   `title` nvarchar(200) NOT NULL,
   `price` int NOT NULL,
   `idcate` int(11) NOT NULL,
-  `createdat` datetime DEFAULT NULL,
-  `updatedat` datetime DEFAULT NULL,
+  `createdat` date DEFAULT NULL,
+  `updatedat` date DEFAULT NULL,
   `image` varchar(500) NOT NULL,
   `information` nvarchar(1000) DEFAULT NULL,
   `description` nvarchar(1000) DEFAULT NULL,
@@ -49,7 +49,7 @@ CREATE TABLE `users` (
 	`id` int(11) NOT NULL AUTO_INCREMENT primary key,
     `name` nvarchar(100) NOT NULL,
     `pass` nvarchar(100) NOT NULL,
-    `email` nvarchar(100) NOT NULL,
+    `email` nvarchar(100) NOT NULL unique,
     `role` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

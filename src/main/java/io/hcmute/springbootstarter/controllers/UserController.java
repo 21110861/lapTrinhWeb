@@ -1,6 +1,5 @@
 package io.hcmute.springbootstarter.controllers;
 
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,24 +11,24 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
 import io.hcmute.springbootstarter.models.Users;
 import io.hcmute.springbootstarter.services.UsersService;
 
 @Controller
 public class UserController {
 
-    @Autowired
-    private UsersService usersService;
+	@Autowired
+	private UsersService usersService;
 
-    @GetMapping("/admin/users")
-    public String loadUsers(Model model) {
-        List<Users> users = usersService.getAllUsers();
+	@GetMapping("/admin/users")
+	public String loadUsers(Model model) {
+		List<Users> users = usersService.getAllUsers();
 
-        model.addAttribute("listUsers", users);
-        return "users";
-    }
+		model.addAttribute("listUsers", users);
+		return "users";
+	}
 
 	@DeleteMapping("/admin/users/delete/{id}")
 	public ResponseEntity<String> deleteCategory(@PathVariable("id") int id) {
@@ -54,4 +53,9 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(addedUser);
 	}
 
+	@PutMapping("/admin/users")
+	public ResponseEntity<?> updateProduct(@RequestBody Users user) {
+		usersService.updateUser(user);
+		return ResponseEntity.status(HttpStatus.OK).body("thành công");
+	}
 }

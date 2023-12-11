@@ -80,7 +80,7 @@
                                     <td>${category.updatedat}</td>
                                     <td>
                                         <div>
-                                            <a class="h4" href="/admin/categories/edit/${category.id}">Edit</a>
+                                            <a class="h4" onclick="editRow(${category.id})">Edit</a>
                                         </div>
                                         <div>
                                             <span class="btn-separator"></span>
@@ -124,7 +124,7 @@
                     };
 
                     // Gửi POST request đến Spring Controller
-                    fetch('<c:url value="/admin/categories/add" />', {
+                    fetch('/admin/categories/add"', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -194,7 +194,7 @@
                 }
 
                 function deleteRow(categoryId) {
-                    fetch('<c:url value="/admin/categories/delete/' + categoryId + '" />', {
+                    fetch('/admin/categories/delete/' + categoryId, {
                         method: 'DELETE',
                         headers: {
                             'Content-Type': 'application/json'
@@ -212,6 +212,68 @@
                         })
                         .catch(error => console.error('Error:', error));
                 }
+                function editRow(categoryId) {
+                    // Lấy ra các element trên dòng có id là `row-categoryId`
+                    var row = document.getElementById('row-' + categoryId);
+                    var imageElement = row.cells[1];
+                    var titleElement = row.cells[2];
+                    var createdElement = row.cells[3];
+                    var updatedElement = row.cells[4];
+                    var editButton = row.cells[5].querySelector('.h4');
+
+                    // Thay thế các giá trị hiện tại bằng các input/textarea/select tương ứng
+                    titleElement.innerHTML = '<input type="text" id="editedTitle" value="' + titleElement.textContent + '"/>';
+                    imageElement.innerHTML = '<input type="url" id="editedImage" value="' + imageElement.querySelector('img').src + '"/>';
+                    createdElement.innerHTML = '<input type="text" readonly id="editedCreated" value="' + createdElement.textContent + '"/>';
+                    updatedElement.innerHTML = '<input type="text" readonly id="editedUpdated" value="' + updatedElement.textContent + '"/>';
+
+                    // Thay thế nút "Edit" thành nút "Save" với sự kiện lưu trạng thái
+                    editButton.textContent = 'Save';
+                    editButton.setAttribute('onclick', 'saveCategory(' + categoryId + ')');
+                }
+
+                function saveCategory(categoryId) {
+                    // Lấy ra các giá trị từ các input/textarea/select đã chỉnh sửa
+                    var editedTitle = document.getElementById('editedTitle').value;
+                    var editedImage = document.getElementById('editedImage').value;
+                    var editedCreated = document.getElementById('editedCreated').value;
+                    var editedUpdated = document.getElementById('editedUpdated').value;
+
+                    var data = {
+                        "id": categoryId,
+                        "name": editedTitle,
+                        "image": editedImage,
+                        // Include other properties as needed
+                    };
+
+                    fetch('/admin/categories/', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    })
+                        .then(response => response.json())
+                        .then(result => {
+                            console.log('Update successful:', result);
+                        })
+                        .catch(error => {
+                            console.error('Error updating category:', error);
+                            window.location.href = "/admin/categories";
+                        });
+
+                    // Update the table cells with edited values
+                    var row = document.getElementById('row-' + categoryId);
+                    row.cells[2].textContent = editedTitle;
+                    row.cells[1].innerHTML = '<img src="' + editedImage + '" alt="Category Image" style="max-width: 100px; max-height: 100px;" />';
+                    // Update other cells as needed
+
+                    // Replace "Save" button with "Edit" button
+                    var editButton = row.cells[5].querySelector('.h4');
+                    editButton.textContent = 'Edit';
+                    editButton.setAttribute('onclick', 'editCategory(' + categoryId + ')');
+                }
+
             </script>
         </body>
 

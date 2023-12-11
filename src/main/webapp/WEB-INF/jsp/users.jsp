@@ -78,12 +78,12 @@
                                                 <td style="background-color: green;">${user.role}</td>
                                             </c:when>
                                             <c:otherwise>
-                                                <td style="background-color: rgb(207, 160, 245);">${user.role}</td>
+                                                <td style="background-color: rgb(235, 216, 250);">${user.role}</td>
                                             </c:otherwise>
                                         </c:choose>
                                         <td>
                                             <span style="margin-right: 20px;">
-                                                <a class="h4" href="/admin/users/edit/${user.id}">Edit</a>
+                                                <a class="h4" onclick="editRow(${user.id})">Edit</a>
                                             </span>
 
                                             <span>
@@ -101,7 +101,7 @@
                                     <td><input type="text" id="newUserName" placeholder="name" /></td>
                                     <td>
                                         <span>
-                                            <input type="email" id="newUserEmail" placeholder="email" />
+                                            <input type="email" id="newUserEmail" placeholder="email" style="margin-right: 40px;"/>
                                         </span>
                                         <span>
                                             <input type="password" id="newUserPassword" placeholder="password" />
@@ -117,15 +117,86 @@
                                             onclick="addNewUser()">Add</button></td>
                                 </tr>
                             </tfoot>
-
-                            <!-- ... -->
-
                         </table>
                     </div>
                 </div>
                 <!-- ... -->
 
                 <script>
+                    function editRow(userId) {
+                        var row = document.getElementById('row-' + userId);
+                        var nameElement = row.cells[1];
+                        var emailElement = row.cells[2];
+                        var roleElement = row.cells[3];
+                        var editButton = row.cells[4].querySelector('.h4');
+
+                        // Get the current role value
+                        var currentRole = roleElement.textContent.trim();
+
+                        // Replace current values with input/textarea/select
+                        nameElement.innerHTML = '<input type="text" id="editedName" value="' + nameElement.textContent + '"/>';
+                        emailElement.innerHTML = '<input type="text" id="editedEmail" value="' + emailElement.textContent + '"/>';
+
+                        // Generate a dropdown for roles
+                        var selectOptions = [
+                            { value: 'admin', label: 'Admin' },
+                            { value: 'user', label: 'User' }
+                        ];
+
+                        roleElement.innerHTML = '<select id="editedRole">' +
+                            selectOptions.map(option =>
+                                '<option value="' + option.value + '"' + (currentRole === option.value ? ' selected' : '') + '>' + option.label + '</option>'
+                            ).join('') +
+                            '</select>';
+
+                        // Replace "Edit" button with "Save" button
+                        editButton.textContent = 'Save';
+                        editButton.setAttribute('onclick', 'saveRow(' + userId + ')');
+                    }
+
+                    function saveRow(userId) {
+                        // Get edited values from input/textarea/select
+                        var editedName = document.getElementById('editedName').value;
+                        var editedEmail = document.getElementById('editedEmail').value;
+                        var editedRoleSelect = document.getElementById('editedRole');
+                        var editedRole = editedRoleSelect.options[editedRoleSelect.selectedIndex].value;
+
+                        var data = {
+                            "id": userId,
+                            "name": editedName,
+                            "email": editedEmail,
+                            "role": editedRole
+                        };
+
+                        // Perform fetch to update the user
+                        fetch('/admin/users', {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(data)
+                        })
+                            .then(response => response.json())
+                            .then(result => {
+                                console.log('Update successful:', result);
+                            })
+                            .catch(error => {
+                                console.error('Error updating user:', error);
+                                window.location.href = "/admin/users";
+                            });
+
+                        // Update the table cells with edited values
+                        var row = document.getElementById('row-' + userId);
+                        row.cells[1].textContent = editedName;
+                        row.cells[2].textContent = editedEmail;
+                        row.cells[3].textContent = editedRole;
+
+                        // Replace "Save" button with "Edit" button
+                        var editButton = row.cells[4].querySelector('.h4');
+                        editButton.textContent = 'Edit';
+                        editButton.setAttribute('onclick', 'editRow(' + userId + ')');
+                    }
+
                     function addNewUser() {
                         var newUser = {
                             name: document.getElementById("newUserName").value,
@@ -168,7 +239,7 @@
                                 if (data.role === "admin") {
                                     cell4.style.backgroundColor = "green"; // Màu xanh cho vai trò "admin"
                                 } else {
-                                    cell4.style.backgroundColor = 'rgb(207, 160, 245)'; // Màu hường cho vai trò khác
+                                    cell4.style.backgroundColor = 'rgb(235, 216, 250)'; // Màu hường cho vai trò khác
                                 }
                                 // Thêm nút Edit
                                 var editSpan = document.createElement('span');

@@ -27,7 +27,6 @@ public class DetailController {
     public String viewProductDetail(Model model) {
     	 model.addAttribute("listproducts", sameCategoryProducts);
          model.addAttribute("chosenProduct", productWantToView);
-         System.out.println("getmapping");
          model.addAttribute("listHistoryProducts", historyProducts);
         return "shop-details";
     }
@@ -35,7 +34,6 @@ public class DetailController {
     @PostMapping("/detail")
     public ResponseEntity<?> findDetailsAboutProducts(@RequestBody  History history) {
         this.productWantToView = productService.getProduct(history.latestId);
-        System.out.println("infor=" +this.productWantToView.getInformation());
         this.sameCategoryProducts = productService.getAllActiveProductsByCategory(productWantToView.getCategory().getId(), "còn bán");
         this.historyProducts = productService.getAllProductsFromListId(history.historyList);
         return ResponseEntity.status(HttpStatus.OK).body("ổn");
