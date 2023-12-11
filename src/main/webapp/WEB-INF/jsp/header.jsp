@@ -61,7 +61,10 @@
                 <div id="mobile-menu-wrap"></div>
                 <div class="offcanvas__option">
                     <ul>
-                        <li><a href="#">Sign in</a> <span class="arrow_carrot-down"></span></li>
+                        <li><a href="/login">Sign in</a>
+                            <span class="arrow_carrot-down">
+                            </span>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -76,7 +79,7 @@
                                 <div class="header__top__inner">
                                     <div class="header__top__left">
                                         <ul>
-                                            <li><a href="#">Sign in</a> <span class="arrow_carrot-down"></span></li>
+                                            <li><a href="/login">Sign in</a> <span class="arrow_carrot-down"></span></li>
                                         </ul>
                                     </div>
                                     <div class="header__logo">
@@ -107,7 +110,7 @@
                                 <ul>
                                     <li class="active"><a href="/">Trang Chủ</a></li>
                                     <li><a href="./about.html">Liên hệ</a></li>
-                                    <li><a href="./shop.html">Mua Hàng</a></li>
+                                    <li><a href="/shop">Mua Hàng</a></li>
                                 </ul>
                             </nav>
                         </div>

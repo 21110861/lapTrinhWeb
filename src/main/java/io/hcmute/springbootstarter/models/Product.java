@@ -32,6 +32,7 @@ public class Product {
 	public Product() {
 	}
 	
+
 	public Product(int id, String title, int price, Category category, Date createdat, Date updatedat, String image,
 			String information, String description, String status) {
 		super();
