@@ -9,8 +9,7 @@ CREATE TABLE `category` (
   `name` nvarchar(50) NOT NULL,
   `createdat` datetime DEFAULT NULL,
   `updatedat` datetime DEFAULT NULL,
-  `image` varchar(500) NOT NULL,
-  `detail` nvarchar(1000)
+  `image` varchar(500) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `orders` (
@@ -50,27 +49,16 @@ CREATE TABLE `users` (
 	`id` int(11) NOT NULL AUTO_INCREMENT primary key,
     `name` nvarchar(100) NOT NULL,
     `pass` nvarchar(100) NOT NULL,
-    `email` nvarchar(100) NOT NULL
+    `email` nvarchar(100) NOT NULL,
+    `role` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `role` (
-	`id` int NOT NULL AUTO_INCREMENT primary key,
-    `name` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `users_roles` (
-    `user_id` int,
-    `role_id` int,
-    FOREIGN KEY (`user_id`) REFERENCES `users`(`id`),
-    FOREIGN KEY (`role_id`) REFERENCES `role`(`id`)
-);
-
-
-INSERT INTO `category` (`id`, `name`, `createdat`, `updatedat`, `image`, `detail`) VALUES
-(1, 'Trà sữa', '2020-01-01 00:00:00', '2023-11-07 08:07:44', 'https://i.pinimg.com/564x/67/28/9c/67289c8c69651b25b9ac5a39a6d9ce81.jpg', 'Cùng thưởng thức những món trà sữa hot trend, độc đáo, béo ngậy, thơm ngon.'),
-(2, 'Món ăn nhẹ', '2020-01-01 00:00:00', '2023-07-22 16:07:29', 'https://i.pinimg.com/564x/72/90/d6/7290d659acf5244dda672660dc6d1fc1.jpg', 'Thưởng thức những món ăn nhẹ thơm ngon, đặc sắc sẽ mang lại cho bạn trải nghiệm tuyệt với'),
-(3, 'Bánh mì', '2020-01-01 00:00:00', '2023-07-22 16:12:25', 'https://i.pinimg.com/564x/d6/df/f0/d6dff03bc5e48070d5280fc1a979ab06.jpg', 'Gói gọn trong ổ bánh mì Việt Nam là từng lớp chả, từng lớp jambon hòa quyện cùng bơ và pate thơm lừng, thêm dưa rau cho bữa sáng đầy năng lượng.'),
-(4, 'Cà phê', '2020-01-01 00:00:00', '2023-07-13 10:57:52', 'https://i.pinimg.com/564x/38/38/fd/3838fd2bcaceff404efc8329aba19b4c.jpg', 'Thức uống giúp tỉnh táo tức thì để bắt đầu ngày mới thật hứng khởi.');
+INSERT INTO `category` (`id`, `name`, `createdat`, `updatedat`, `image`) VALUES
+(1, 'Trà sữa', '2020-01-01 00:00:00', '2023-11-07 08:07:44', 'https://i.pinimg.com/564x/67/28/9c/67289c8c69651b25b9ac5a39a6d9ce81.jpg'),
+(2, 'Món ăn nhẹ', '2020-01-01 00:00:00', '2023-07-22 16:07:29', 'https://i.pinimg.com/564x/72/90/d6/7290d659acf5244dda672660dc6d1fc1.jpg'),
+(3, 'Bánh mì', '2020-01-01 00:00:00', '2023-07-22 16:12:25', 'https://i.pinimg.com/564x/d6/df/f0/d6dff03bc5e48070d5280fc1a979ab06.jpg'),
+(4, 'Cà phê', '2020-01-01 00:00:00', '2023-07-13 10:57:52', 'https://i.pinimg.com/564x/38/38/fd/3838fd2bcaceff404efc8329aba19b4c.jpg');
 
 INSERT INTO `product` (`title`, `price`, `idcate`, `createdat`, `updatedat`, `image`, `information`, `description`, `status`) VALUES
 ('Bánh Chocolate', 25000, 2, '2020-01-01 00:00:00', '2021-08-15 16:41:50', 'https://i.pinimg.com/564x/ad/45/9f/ad459ffca2f96fe556f9d185b972238e.jpg', 'Bánh chocolate là một món tráng miệng được yêu thích đã được thưởng thức trong nhiều thế kỷ. Đây là một loại bánh truyền thống có nhiều hình thức khác nhau, từ các công thức làm tại nhà đơn giản đến những sáng tạo ẩm thực phức tạp.', 'Bánh chocolate được đặc trưng bởi hương vị đậm đà và sang trọng. Mùi cacao lấp đầy không khí khi bánh nướng, tạo ra sự hứng thú cho việc thưởng thức. Cấu trúc của bánh có thể thay đổi từ đặc và đậm đặc đến nhẹ nhàng và phồng, tùy thuộc vào công thức cụ thể và nguyên liệu được sử dụng.', 'còn bán'),
@@ -6130,6 +6118,10 @@ INSERT INTO order_details (`id`, `idprod`, `num`) VALUES (2007, 17, 3);
 INSERT INTO orders (`fullname`, `phone`,`address`, `note`, `date`, `state`) VALUES ('Hoàng Dương Phan', 10002007,'Quận 5', 'Ngọt bình thường', '2023-11-30 11:21:58', 'Đã thanh toán');
 INSERT INTO order_details (`id`, `idprod`, `num`) VALUES (2008, 19, 1);
 INSERT INTO order_details (`id`, `idprod`, `num`) VALUES (2008, 20, 2);
+
+
+insert into users (`name`, `email`, `pass` , `role` ) value ( 'kiếm hiệp' , 'user@vidu.com' , '12345' , 'user');
+insert into users (`name`, `email`, `pass` , `role` ) value ( 'admin' , 'admin@vidu.com' , '12345' , 'admin');
 /*-------------------------------------------------------------------------*/
 -- TỔNG DOANH THU CỦA TỪNG SẢN PHẨM
 DROP PROCEDURE IF EXISTS GetProductRevenue;
@@ -6158,7 +6150,6 @@ END //
 
 DELIMITER ;
 
-CALL GetProductRevenue();
 
 /*-------------------------------------------------------------------------*/
 -- DOANH THU CỦA MỖI THÁNG
@@ -6187,7 +6178,6 @@ END //
 
 DELIMITER ;
 
-CALL GetMonthlyRevenue();
 /*-------------------------------------------------------------------------*/
 -- DOANH THU THEO QUÝ
 DROP PROCEDURE IF EXISTS GetQuarterlyRevenue;
@@ -6216,7 +6206,6 @@ END //
 
 DELIMITER ;
 
-CALL GetQuarterlyRevenue;
 
 /*-------------------------------------------------------------------------*/
 -- DOANH THU CỦA TỪNG SẢN PHẨM TRONG TỪNG THÁNG
@@ -6248,5 +6237,4 @@ END //
 
 DELIMITER ;
 
-CALL GetProductMonthlyRevenue;
 /*-------------------------------------------------------------------------*/

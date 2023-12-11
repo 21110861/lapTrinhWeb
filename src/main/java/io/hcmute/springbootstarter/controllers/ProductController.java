@@ -4,58 +4,36 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import io.hcmute.springbootstarter.models.Category;
 import io.hcmute.springbootstarter.models.Product;
+import io.hcmute.springbootstarter.services.CategoryService;
 import io.hcmute.springbootstarter.services.ProductService;
 
-@RestController
+@Controller
 public class ProductController {
 
 	@Autowired
 	private ProductService productService;
+	@Autowired
+	private CategoryService categoryService;
 
-	@GetMapping("/categories/{id}/products")
-	public String getAllProductByCategory(@PathVariable int id, Model model) {
-		List<Product> listPro = productService.getAllProductsByCategory(id);
-		model.addAttribute("listProducts", listPro);
-		return "index";
-	}
+	
+	
 
-	@GetMapping("/categories/{categoryId}/products/{id}")
-	public Product getProduct(@PathVariable int id) {
-		return productService.getProduct(id);
-	}
+	
 
-	@PostMapping("/categories/{categoryId}/products")
-	public void addProduct(@RequestBody Product product, @PathVariable int categoryId) {
-		product.setCategory(new Category(categoryId));
-		Date today = new Date();
-		product.setCreatedat(today);
-		product.setUpdatedat(today);
-		productService.addProduct(product);
-	}
 
-	@PutMapping("/categories/{categoryId}/products/{id}")
-	public void updateProduct(@RequestBody Product product, @PathVariable int categoryId, @PathVariable int id) {
-		product.setId(id);
-		product.setCategory(new Category(categoryId));
-		productService.updateProduct(product);
-	}
-
-	@DeleteMapping("/categories/{categoryId}/products/{id}")
-	public void deleteProduct(@PathVariable int id) {
-		productService.deleteProduct(id);
-	}
 
 	@GetMapping("/admin/products")
 	public String showProductList(Model model) {
 		List<Product> listProducts = productService.getAllProducts();
 		model.addAttribute("listProducts", listProducts);
-
+		model.addAttribute("listCategories", categoryService.getAllCategory());
 		return "products";
 	}
 
@@ -72,6 +50,22 @@ public class ProductController {
 		productService.saveProduct(product);
 		ra.addFlashAttribute("message", "The Product has been saved successfully.");
 		return "redirect:/admin/products";
+	}
+
+	@PostMapping("/admin/products/add")
+	public ResponseEntity<?> addNewProduct(@RequestBody Product newProduct) {
+		// Kiểm tra nếu request là request lấy favicon.ico thì không xử lý
+		if ("favicon.ico".equals(newProduct.getTitle())) {
+			return ResponseEntity.status(HttpStatus.OK).build();
+		}
+
+		// Thực hiện logic thêm sản phẩm mới
+		Date today = new Date();
+		newProduct.setCreatedat(today);
+		newProduct.setUpdatedat(today);
+		Product addedProduct = productService.addProduct(newProduct);
+
+		return ResponseEntity.status(HttpStatus.CREATED).body(addedProduct);
 	}
 
 	@GetMapping("/admin/products/edit/{id}")
@@ -102,16 +96,18 @@ public class ProductController {
 		}
 	}
 
-	@GetMapping("/admin/products/delete/{id}")
-	public String deleteProduct(@PathVariable("id") int id, RedirectAttributes ra) {
-		try {
-			productService.deleteProduct(id);
-			ra.addFlashAttribute("message", "The Product ID " + id + " has been deleted.");
-		} catch (Exception e) {
-			ra.addFlashAttribute("message", e.getMessage());
-		}
-		return "redirect:/admin/products";
-	}
+	@DeleteMapping("/admin/products/delete/{productId}")
+    public ResponseEntity<String> deleteProduct(@PathVariable int productId) {
+		System.out.println("here?"+productId);
+        try {
+            // Gọi service để xóa sản phẩm dựa trên ID
+            productService.deleteProduct(productId);
+            return ResponseEntity.ok("Product deleted successfully");
+        } catch (Exception e) {
+        	System.err.println(e.getMessage());
+            return ResponseEntity.status(500).body("Failed to delete product");
+        }
+    }
 
 	@GetMapping("/admin/products/search")
 	public String searchByIdForm(Model model) {

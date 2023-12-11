@@ -79,8 +79,24 @@
                                 <div class="header__top__inner">
                                     <div class="header__top__left">
                                         <ul>
-                                            <li><a href="/login">Sign in</a> <span class="arrow_carrot-down"></span></li>
+                                            <c:if test="${empty sessionScope.user}">
+                                                <li><a href="/login">Sign in</a> <span class="arrow_carrot-down"></span></li>
+                                            </c:if>
+                                            <c:if test="${not empty sessionScope.user}">
+                                                <li>
+                                                    <a>Welcome, ${sessionScope.user}! </a> <span class="arrow_carrot-down"></span>
+                                                    <ul>
+                                                        <li>Cá Nhân</li>
+                                                        <li><a href="/logout" style="color: white;">Log out</a></li>
+                                                        <c:if test="${sessionScope.isAdmin}">
+                                                            <!-- Display additional options for admin -->
+                                                            <li><a href="/admin" style="color: white;">Quản Lý</a></li>
+                                                        </c:if>
+                                                    </ul>
+                                                </li>
+                                            </c:if>
                                         </ul>
+                                        
                                     </div>
                                     <div class="header__logo">
                                         <a href="/"><img src="<c:url value=" /img/logo.png" />" alt=""></a>

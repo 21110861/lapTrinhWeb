@@ -1,37 +1,69 @@
 body {
-    background-color: #f8f9fa; /* Màu nền cho body */
-    padding-top: 50px; /* Khoảng cách từ trên xuống cho phần container */
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 50px;
 }
 
 h2 {
-    color: #007bff; /* Màu chữ cho tiêu đề */
-}
-
-form {
-    background-color: #ffffff; /* Màu nền cho form */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng đổ */
-    padding: 20px; /* Khoảng cách giữa các phần tử trong form */
+    text-align: center;
+    color: #007bff;
 }
 
 .form-group {
-    margin-bottom: 15px; /* Khoảng cách giữa các form group */
+    margin-bottom: 20px;
 }
 
-label {
-    color: #495057; /* Màu chữ cho nhãn label */
+.form-label {
+    display: block;
+    margin-bottom: 5px;
+    color: #495057;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+.btn-primary, .btn-secondary {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
 }
 
 .btn-primary {
-    background-color: #007bff; /* Màu nền cho button Save */
-    border-color: #007bff; /* Màu đường viền cho button Save */
+    background-color: #007bff;
+    color: #ffffff;
 }
 
 .btn-secondary {
-    background-color: #6c757d; /* Màu nền cho button Cancel */
-    border-color: #6c757d; /* Màu đường viền cho button Cancel */
+    background-color: #6c757d;
+    color: #ffffff;
 }
 
-/* Hover effect for buttons */
-.btn-primary:hover, .btn-secondary:hover {
-    filter: brightness(90%); /* Hiệu ứng sáng nhẹ khi hover */
+.btn-primary:hover {
+    background-color: #0056b3;
+    color: #ffffff;
+    transform: scale(1.05);
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    color: #ffffff;
+    transform: scale(1.05);
 }

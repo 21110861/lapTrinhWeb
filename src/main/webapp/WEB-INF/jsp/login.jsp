@@ -6,7 +6,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Registration and Login App</title>
-    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
@@ -21,7 +20,7 @@
                 <img src="https://i.pinimg.com/originals/12/c4/b1/12c4b178a1f8fb172b18889c67a03af2.jpg" class="img-fluid" style="width: 250px">
             </div>
             <p class="text-dark fs-2" style="font-family: 'Courier New', Courier, monospace; font-weight: 600;">WEBSITE MILK TEA</p>
-            <small class="text-dark text-wrap text-center" style="width: 17rem; font-family: 'Courier New', Courier, monospace;"></small>
+            <!-- Remove unused <small> tag or add meaningful content -->
         </div>
 
         <div class="col-md-6 right-box">
@@ -39,13 +38,14 @@
                     </c:if>
 
                     <div class="mb-1">
-                        <label for="username" class="form-label"></label>
-                        <input type="text" class="form-control form-control-lg bg-light fs-6" id="username" name="username" placeholder="Enter Email ID" autofocus="autofocus">
+                        <label for="username" class="form-label">Email ID:</label>
+                        <input type="text" class="form-control form-control-lg bg-light fs-6" id="username" name="email" placeholder="Enter Email ID" autofocus="autofocus">
                     </div>
+                    
 
                     <div class="mb-1">
-                        <label for="password" class="form-label"></label>
-                        <input type="password" class="form-control form-control-lg bg-light fs-6" id="password" name="password" placeholder="Enter Password">
+                        <label for="password" class="form-label">Password:</label>
+                        <input type="password" class="form-control form-control-lg bg-light fs-6" id="password" name="pass" placeholder="Enter Password">
                     </div>
 
                     <div class="mb-3" style="margin-top: 40px">

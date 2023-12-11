@@ -20,7 +20,10 @@ public class HomeController {
 	@Autowired
 	private ProductService productService;
 	
-
+	@GetMapping("/favicon.ico")
+	public void returnNoFavicon() {
+	    // This method does nothing and returns void to handle favicon.ico requests
+	}
 	@GetMapping(value = {"/","/{categoryId}"})
 	public String showProduct(@PathVariable(required = false) Integer categoryId,Model model) {
 		List<Category> listcate = null;

@@ -10,4 +10,5 @@ import io.hcmute.springbootstarter.models.Users;
 public interface UserRepository extends JpaRepository<Users, Integer>{
 	Users findByEmail(String email);
 	Users save(UserRegistration registrationDto);
+	Users findByEmailAndPass(String email, String pass);
 }

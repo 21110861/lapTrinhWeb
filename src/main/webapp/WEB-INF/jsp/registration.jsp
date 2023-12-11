@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <title>Registration</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="<c:url value='/static/fileCss/new.css' />">
+    <link rel="stylesheet" type="text/css" href="<c:url value='/css/new.css' />">
 </head>
 <body>
 
@@ -28,12 +28,12 @@
                     <p></p>
                 </div>
                 <c:if test="${param.success}">
-                    <div class="alert alert-info mb-3">You've successfully registered to our awesome app!</div>
+                    <div class="alert alert-info mb-3">${param.message}</div>
                 </c:if>
                 <form action="<c:url value='/registration' />" method="post" modelAttribute="user" class="w-60 mx-auto">
                     <div class="mb-1">
                         <label for="userName" class="form-label"></label>
-                        <input id="userName" class="form-control form-control-lg bg-light fs-6" name="userName" required autofocus="autofocus" placeholder="Enter Username">
+                        <input id="userName" class="form-control form-control-lg bg-light fs-6" name="name" required autofocus="autofocus" placeholder="Enter Username">
                     </div>
 
                     <div class="mb-1">
@@ -43,7 +43,7 @@
 
                     <div class="mb-1">
                         <label for="password" class="form-label"></label>
-                        <input id="password" class="form-control form-control-lg bg-light fs-6" type="password" name="password" required autofocus="autofocus" placeholder="Enter Password">
+                        <input id="password" class="form-control form-control-lg bg-light fs-6" type="password" name="pass" required autofocus="autofocus" placeholder="Enter Password">
                     </div>
 
                     <div class="mb-3" style="margin-top: 40px">
@@ -51,7 +51,7 @@
                     </div>
 
                     <div class="row">
-                        <small class="col">Already registered? <a href="#">Login here</a></small>
+                        <small class="col">Already registered? <a href="/login">Login here</a></small>
                     </div>
                 </form>
             </div>

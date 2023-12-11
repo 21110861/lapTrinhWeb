@@ -100,11 +100,10 @@ public class ProductService {
 
 	}
 
-	public void addProduct(Product product) {
-		productRepository.save(product);
-
+	public Product addProduct(Product product) {
+		Product addp = productRepository.save(product);
+		return addp;
 	}
-
 	public void updateProduct(Product product) {
 		productRepository.save(product);
 	}
