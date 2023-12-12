@@ -175,8 +175,8 @@
                     var chosenCateName2 = document.getElementById("chosenCateName2");
                     var chosenDes = document.getElementById("chosenDes");
                     var chosenInfo = document.getElementById("chosenInfo");
-                    var chosenPrice = document.getElementById("chosenPrice").value;
-                    var chosenTitle = document.getElementById("chosenTitle").value;
+                    var chosenPrice = document.getElementById("chosenPrice");
+                    var chosenTitle = document.getElementById("chosenTitle");
                     console.log(product);
                     chosenDes.textContent = descrip;
                     chosenInfo.textContent = info;
@@ -187,10 +187,12 @@
                     bigImg.src = product.image;
 
                     // Cập nhật các ảnh nhỏ
+                    // Cập nhật các ảnh nhỏ
                     var thumbImages = document.querySelectorAll('.pt__item img');
                     for (var i = 0; i < thumbImages.length; i++) {
                         thumbImages[i].src = product.image;
                     }
+
                 }
                 function addToCart() {
                     // Get the product id and quantity
@@ -199,7 +201,7 @@
                     var chosenDes = document.getElementById("chosenDes");
                     var chosenInfo = document.getElementById("chosenInfo");
                     var chosenPrice = document.getElementById("chosenPrice").textContent;
-                    chosenPrice =  chosenPrice.replace(/[^\d]/g, '');
+                    chosenPrice = chosenPrice.replace(/[^\d]/g, '');
                     chosenPrice = parseInt(chosenPrice);
                     var chosenTitle = document.getElementById("chosenTitle").textContent;
                     var chosenImage = document.getElementById("chosenImage").src;
@@ -234,6 +236,32 @@
                     // Calculate the total quantity by iterating through cart items
                     totalQuantityDisplay.textContent = cartItems.length + "món";
 
+                }
+                function recolorImage(imageLink, color, callback) {
+                    // Tạo ảnh mới để tránh cross-origin issues
+                    var image = new Image();
+                    image.crossOrigin = 'Anonymous';
+                    image.src = imageLink;
+
+                    image.onload = function () {
+                        // Tạo canvas để vẽ ảnh
+                        var canvas = document.createElement('canvas');
+                        canvas.width = image.width;
+                        canvas.height = image.height;
+                        var ctx = canvas.getContext('2d');
+
+                        // Vẽ ảnh lên canvas
+                        ctx.drawImage(image, 0, 0);
+
+                        // Recolor ảnh bằng cách sử dụng globalCompositeOperation
+                        ctx.globalCompositeOperation = 'source-atop';
+                        ctx.fillStyle = color;
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        ctx.globalCompositeOperation = 'source-over';
+
+                        // Gọi callback với chuỗi Data URL của ảnh được chỉnh
+                        callback(canvas.toDataURL());
+                    };
                 }
             </script>
         </body>
